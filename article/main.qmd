@@ -1,0 +1,18 @@
+---
+title: "Econometria - Mínimos Quadrados Ordinários"
+author:
+    - "Flávio Hugo Pangracio Silva"
+    - "Guilherme Gomes Ferreira"
+bibliography: referencies/ref.bib
+csl: cite_styles/abnt.csl
+highlight-style: kate
+fig-cap-location: top
+lang: pt-BR
+format:
+    pdf:
+        mainfont: "Times New Roman"
+---
+
+# Introdução
+
+Aqui tem um texto
