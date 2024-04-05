@@ -1,19 +1,44 @@
 ---
-title: "Mínimos Quadrados Ordinários: uma aplicação na análise das questões institucionais de municípios brasileiros"
+title: "MÍNIMOS QUADRADOS ORDINÁRIOS: UMA APLICAÇÃO NA ANÁLISE DAS QUESTÕES INSTITUCIONAIS DE MUNICÍPIOS BRASILEIROS"
+institution: "UNIVERSIDADE FEDERAL DE MINAS GERAIS"
+advisor: "Ana Hermeto"
+city: "Belo Horizonte"
+state: "MG"
+month: "Abril"
+year: 2024
 author:
-    - "Flávio Hugo Pangracio Silva"
-    - "Guilherme Gomes Ferreira"
+    - name: "Flávio Hugo Pangracio Silva"
+      orcid: 0000-0003-4045-101X
+      email: "flaviopangracio@cedeplar.ufmg.br"
+      affiliations:
+        - name: "Cedeplar - UFMG"
+          url: https://cedeplar.ufmg.br
+
+    - name: "Guilherme Gomes Ferreira"
+      orcid: 0009-0006-5032-8997
+      email: "guilhermegf2019@cedeplar.ufmg.br"
+      affiliations:
+        - name: "Cedeplar - UFMG"
+          url: https://cedeplar.ufmg.br
 bibliography: referencies/ref.bib
 csl: cite_styles/abnt.csl
 highlight-style: kate
 fig-cap-location: top
 lang: pt-BR
+license: "This work is dedicated to the Public Domain"
 format:
     pdf:
+        template-partials:
+            - tex_files/_print-author.tex
+            - tex_files/doc-class.tex
+            - tex_files/before-body.tex
         mainfont: "Times New Roman"
 ---
 
-# Introdução
+\pagestyle{fancy} <!-- Show the page number --> \justify
+\onehalfspacing
+
+# INTRODUÇÃO
 
 O presente trabalho se propõe a explorar de maneira detalhada o método de mínimos quadrados ordinários (MQO), apresentando uma aplicação na análise das questões institucionais presentes nos municípios brasileiros. Este método estatístico é amplamente utilizado na análise econômica, sendo fundamental para compreender as relações entre variáveis e realizar previsões.
 
@@ -28,7 +53,11 @@ Por fim, demonstraremos a aplicação do modelo de MQO na análise das questões
 @heiss
 @greene
 
-# Referências
+\newpage
+
+# REFERÊNCIAS
+
+\singlespacing
 
 ::: {#refs}
 :::
