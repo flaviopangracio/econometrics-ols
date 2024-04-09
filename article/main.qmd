@@ -22,16 +22,23 @@ author:
           url: https://cedeplar.ufmg.br
 bibliography: referencies/ref.bib
 csl: cite_styles/abnt.csl
-highlight-style: kate
+highlight-style: atom-one
 fig-cap-location: top
+linkcolor: "black"
+number-sections: true
 lang: pt-BR
 license: "This work is dedicated to the Public Domain"
+execute:
+  error: false
+  warning: false
+header-includes:
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},fontsize=\footnotesize}
 format:
     pdf:
         template-partials:
             - tex_files/_print-author.tex
-            - tex_files/doc-class.tex
             - tex_files/before-body.tex
+            - tex_files/doc-class.tex
         mainfont: "Times New Roman"
 ---
 
@@ -56,11 +63,11 @@ A priori, antes de adentrar em detalhes do estimador de MQO, é preciso explicar
 
 Nesta perspectiva, para a definição do modelo clássico de regressão linear, são necessárias algumas hipóteses: 
 
-## Linearidade do modelo:
+## Linearidade do modelo
 
 A primeira hipótese implica que o modelo deve ser linear nos parâmetros estimados. Disso decorre que as variáveis explicativas podem ser não lineares. Essa hipótese basicamente indica que a relação das variáveis independentes com o parâmetro estimado é linear, ou seja, uma variação marginal nas variáveis independentes resultará em uma variação constante na variável explicada. 
 
-## Posto Completo: 
+## Posto Completo
 
 Essa hipótese é uma condição necessária do MCRL, haja vista que, se não satisfeita, é impossível estimar os paramêtros do modelo. Em termos matriciais, implica que a matriz das variáveis independentes deve ser não singular o que, por sua vez, exige que essas variáveis não sejam combinações lineares perfeitas umas das outras. Também é conhecida como condição de identificação 
 
@@ -85,6 +92,128 @@ Implica que os termos de perturbação são normalmente distribuídos, possuindo
 Finalizada esta parte, apresentou-se as premissas do MCRL, as quais servem como base para a construção de um modelo econométrico. O objetivo seguinte será descrever métodos de estimação de modelos, dentre eles, o famoso e amplamente utilizado, método de mínimos quadrados ordinários. 
 
 # REGRESSÃO POR MÍNIMOS QUADRADOS 
+
+# ESTIMAÇÃO
+
+Carregando pacotes:
+```{r}
+library(readxl)
+library(dplyr)
+```
+
+Carregando a base da REGIC 2018 e ajustando as variáveis de interesse:
+
+```{r}
+df_regic <- readxl::read_xlsx(
+  path = "data/REGIC2018 Cidades v2.xlsx",
+  sheet="Base de dados por Cidades"
+) |>
+  dplyr::filter(
+    UF == "MG"
+  ) |>
+  dplyr::select(
+    "COD_CIDADE",
+    "NOME_CIDADE",
+    "VAR01",
+    "VAR03",
+    "VAR23",
+    "VAR29",
+    "VAR85",
+    "VAR89"
+  ) |>
+  dplyr::rename(
+    "populacao" = "VAR01",
+    "pib" = "VAR03",
+    "cige" = "VAR23",
+    "cgp" = "VAR29"
+  ) |>
+  dplyr::mutate(
+    "populacao" = as.numeric(populacao),
+    "pib" = as.numeric(pib),
+    "cige" = as.numeric(cige),
+    "cgp" = as.numeric(cgp),
+    "banco_publico" = ifelse(VAR85 | VAR89, 1, 0),
+    "log_cige" = ifelse(as.numeric(cige) < 1, 0, log(as.numeric(cige))),
+    "log_cgp" = ifelse(as.numeric(cgp) < 1, 0, log(as.numeric(cgp)))
+  )
+
+df_regic[is.na(df_regic)] <- 0
+
+df_regic$pib_pc <- df_regic$pib / df_regic$populacao
+```
+
+## Análise Descritiva
+
+```{r}
+#| fig-cap: Histograma do PIB per capita
+
+## PIB per capita
+hist(df_regic$pib_pc, freq=FALSE, ylim=c(0,.07))
+lines(density(df_regic$pib_pc), lwd=2)
+```
+
+```{r}
+summary(df_regic$pib_pc)
+```
+
+```{r}
+#| fig-cap: Coeficiente de Intensidade da Gestão Empresarial (CI)
+hist(df_regic$log_cige, freq=FALSE)
+lines(density(df_regic$log_cige), lwd=2)
+```
+
+```{r}
+summary(df_regic$log_cige)
+```
+
+```{r}
+#| fig-cap: Centralidade de Gestão Pública (CGP)
+hist(df_regic$log_cgp, freq=FALSE)
+lines(density(df_regic$log_cgp), lwd=2)
+```
+
+```{r}
+summary(df_regic$log_cige)
+```
+
+<!-- ## Presença de banco público
+table(df_regic$banco_publico)
+barplot(table(df_regic$banco_publico))
+summary(df_regic$banco_publico)
+
+## Correlação entre PIBpc e CGP
+cor(df_regic$pib_pc, df_regic$cgp)
+
+## Correlação entre PIBpc e CIGE
+cor(df_regic$pib_pc, df_regic$cige)
+
+## Correlação entre PIBpc e Presença de Banco Público
+cor(df_regic$pib_pc, df_regic$banco_publico)
+
+## Correlação entre as variáveis explicativas:
+cor(df_regic$cgp, df_regic$cige)
+cor(df_regic$cgp, df_regic$banco_publico)
+cor(df_regic$cige, df_regic$banco_publico)
+
+## Boxplot
+boxplot(df_regic$pib_pc~df_regic$banco_publico)
+
+## Scatter Plot
+plot(y = log(df_regic$pib_pc), x = df_regic$log_cige)
+
+## MQO manual
+covxy <- cov(df_regic$log_cige, log(df_regic$pib_pc))
+varx <- var(df_regic$log_cige)
+mediay <- mean(log(df_regic$pib_pc))
+mediax <- mean(df_regic$log_cige)
+b1 <- covxy/varx
+
+b0 <- mediay - b1*mediax
+
+formula <- log(pib_pc) ~ log_cige + log_cgp + banco_publico
+
+mqo <- lm(formula, df_regic)
+summary(mqo) -->
 
 @heiss
 @greene
