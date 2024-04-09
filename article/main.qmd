@@ -22,14 +22,13 @@ author:
           url: https://cedeplar.ufmg.br
 bibliography: referencies/ref.bib
 csl: cite_styles/abnt.csl
-highlight-style: kate
+highlight-style: atom-one
 fig-cap-location: top
 lang: pt-BR
 license: "This work is dedicated to the Public Domain"
 execute:
   error: false
   warning: false
-keep-tex: true
 header-includes:
   - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},fontsize=\footnotesize}
 format:
