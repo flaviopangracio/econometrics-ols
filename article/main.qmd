@@ -93,7 +93,6 @@ Finalizada esta parte, apresentou-se as premissas do MCRL, as quais servem como 
 
 # REGRESSÃO POR MÍNIMOS QUADRADOS 
 
-<<<<<<< HEAD
 O método de mínimos quadrados ordinários consiste em minimizar a soma do quadrado dos resíduos, a fim de encontrar os parâmetros do modelo. O primeiro passo é distinguir entre as quantidades populacionais não observadas e os parâmetros amostrais. Em outras palavras, existem os parâmetros verdadeiros e os parâmetros calculados no modelo agem como uma estimativa desses parâmetros populacionais, desde que sejam satisfeitas as condições que tornem o MQO aplicável. Em termos matriciais, haja vista que estamos tratando de uma regressão linear múltipla, podemos escrever o modelo da seguinte forma: 
 (colocar fórmulas)
 
@@ -106,7 +105,6 @@ Além disso, sob a hipótese de homocedasticidade, tratada anteriormente no MCRL
 Conforme Wooldrige (2010), para um estimador ser consistente, são necessárias duas premissas. A primeira implica que a covariância entre o resíduo e o vetor de variáveis explicativas seja igual a zero e essa é uma versão mais fraca da exogeneidade. Por outro lado, a segunda premissa diz que a multiplicação matricial de x e sua transposta tem que ser igual a ordem de x, ou seja, implica independência linear. 
 (Colocar formula - livro wooldrige)
 
-=======
 # ESTIMAÇÃO
 
 Carregando pacotes:
@@ -228,7 +226,6 @@ formula <- log(pib_pc) ~ log_cige + log_cgp + banco_publico
 
 mqo <- lm(formula, df_regic)
 summary(mqo) -->
->>>>>>> db089affbc67b253de714c6cd715abaeb201309e
 
 @heiss
 @greene
