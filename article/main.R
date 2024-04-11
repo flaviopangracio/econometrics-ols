@@ -33,11 +33,9 @@ df_regic <- readxl::read_xlsx(
     "cgp" = as.numeric(cgp),
     "banco_publico" = ifelse(VAR85 | VAR89, 1, 0),
     "log_cige" = ifelse(as.numeric(cige) < 1, 0, log(as.numeric(cige))),
-    "log_cgp" = ifelse(as.numeric(cgp) < 1, 0, log(as.numeric(cgp)))
+    "log_cgp" = ifelse(as.numeric(cgp) < 1, 0, log(as.numeric(cgp))),
   )
 
-
-df_regic[is.na(df_regic)] <- 0
 
 df_regic$pib_pc <- df_regic$pib / df_regic$populacao
 
@@ -98,3 +96,4 @@ mqo <- lm(formula, df_regic)
 summary(mqo)
 
 plot(resid(mqo) ~ df_regic$log_cige)
+

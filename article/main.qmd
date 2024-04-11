@@ -55,50 +55,119 @@ Por meio deste trabalho, pretendemos não apenas apresentar a aplicação práti
 
 Inicialmente, abordaremos os principais conceitos e definições relacionados à regressão linear, discutindo os pressupostos e as limitações desse modelo estatístico. Posteriormente, dedicaremos atenção especial à formulação teórica do modelo de MQO, descrevendo o processo de estimativa dos parâmetros e apresentando as principais propriedades estatísticas dos estimadores obtidos por esse método. Além disso, discutiremos técnicas de diagnóstico e avaliação da qualidade do modelo, destacando a importância da interpretação correta dos resultados obtidos.
 
-Por fim, demonstraremos a aplicação do modelo de MQO na análise das questões institucionais de municípios brasileiros, utilizando dados da REGIC para ilustrar o processo de formulação, estimação e interpretação do modelo. Espera-se que este trabalho contribua para ampliar o entendimento sobre o método de MQO e sua aplicação.
+Por fim, demonstraremos a aplicação do modelo de MQO na análise das questões institucionais de municípios brasileiros, utilizando dados da REGIC 2018 para ilustrar o processo de formulação, estimação e interpretação do modelo. Espera-se que este trabalho contribua para ampliar o entendimento sobre o método de MQO e sua aplicação.
 
 # O MODELO CLÁSSICO DE REGRESSÃO LINEAR
 
-A priori, antes de adentrar em detalhes do estimador de MQO, é preciso explicar o modelo clássico de regressão linear, bem como suas hipóteses subjacentes. Nesse sentido, deve se salientar que o modelo clássico de regressão linear admite a forma simples e a forma múltipla. No modelo simples, também conhecido como modelo de regressão bivariada, temos apenas uma variável explicada e uma variável explicativa, além de um intercepto e dos resíduos do modelo. Um problema fundamental do modelo de regressão simples, no entanto, é a dificuldade de fazer uma análise parcial com apenas uma variável explicativa, ignorando todas outras variáveis que afetam a variável explicada, Y, e são não correlacionadas com a variável independente, X. É nesse sentido que existe o modelo de regressão linear múltipla, o qual permite explicar uma variável através de uma junção de mais variáveis independentes e não correlacionadas uma com a outra. Doravante, este trabalho focará no modelo de regressão linear múltipla, com a justificativa de que os pressupostos são análogos aos pressupostos do modelo simples e que com mais variáveis, o que só é permitido neste modelo, é possível fazer uma análise mais robusta. 
+A priori, antes de adentrar em detalhes do estimador de MQO, é preciso explicar o modelo clássico de regressão linear, bem como suas hipóteses subjacentes. Nesse sentido, deve se salientar que o modelo clássico de regressão linear admite a forma simples e a forma múltipla. No modelo simples, também conhecido como modelo de regressão bivariada, temos apenas uma variável explicada e uma variável explicativa, além de um intercepto e dos resíduos do modelo. Um problema fundamental do modelo de regressão simples, no entanto, é a dificuldade de fazer uma análise parcial com apenas uma variável explicativa, ignorando todas outras variáveis que afetam a variável explicada, $Y$, e são não correlacionadas com a variável independente, $X$. É nesse sentido que existe o modelo de regressão linear múltipla, o qual permite explicar uma variável através de uma junção de mais variáveis independentes e não correlacionadas uma com a outra. Doravante, este trabalho focará no modelo de regressão linear múltipla, com a justificativa de que os pressupostos são análogos aos pressupostos do modelo simples e que com mais variáveis, o que só é permitido neste modelo, é possível fazer uma análise mais robusta. 
 
-Nesta perspectiva, para a definição do modelo clássico de regressão linear, são necessárias algumas hipóteses: 
+Nesta perspectiva, para a definição do modelo clássico de regressão linear, são necessárias algumas hipóteses:
 
 ## Linearidade do modelo
 
-A primeira hipótese implica que o modelo deve ser linear nos parâmetros estimados. Disso decorre que as variáveis explicativas podem ser não lineares. Essa hipótese basicamente indica que a relação das variáveis independentes com o parâmetro estimado é linear, ou seja, uma variação marginal nas variáveis independentes resultará em uma variação constante na variável explicada. 
+A primeira hipótese implica que o modelo deve ser linear nos parâmetros estimados. Disso decorre que as variáveis explicativas podem ser não lineares. Essa hipótese basicamente indica que a relação das variáveis independentes com o parâmetro estimado é linear (\ref{eqn:linear}), ou seja, uma variação marginal nas variáveis independentes resultará em uma variação constante na variável explicada.
+
+```{=tex}
+\begin{equation}
+\label{eqn:linear}
+y = x_1 \beta_1 + x_2 \beta_2 + \dots + x_k \beta_k + \varepsilon
+\end{equation}
+```
 
 ## Posto Completo
 
-Essa hipótese é uma condição necessária do MCRL, haja vista que, se não satisfeita, é impossível estimar os paramêtros do modelo. Em termos matriciais, implica que a matriz das variáveis independentes deve ser não singular o que, por sua vez, exige que essas variáveis não sejam combinações lineares perfeitas umas das outras. Também é conhecida como condição de identificação 
+Essa hipótese é uma condição necessária do MCRL, haja vista que, se não satisfeita, é impossível estimar os paramêtros do modelo. Em termos matriciais, implica que a matriz das variáveis independentes deve ser não singular o que, por sua vez, exige que essas variáveis não sejam combinações lineares perfeitas umas das outras. Também é conhecida como condição de identificação.
 
 ## Exogeneidade
 
-Tal condição garante que a média condicional do erro dadas as variáveis explicativas é igual a zero. Também conhecida como exogeneidade estrita, seu significado é de que as variáveis explicativas não possuem relação com o termo de perturbação. Além disso, é importante ressaltar que, como a média condicional do erro é zero, sua média incondicional também é zero, o que é garantido pela lei das expectativas iteradas. Essa é uma forte implicação que garante que uma estimação pelo MCRL sempre acerta na média.Ademais, o MCRL garante a aleatoriedade dos resíduos, isto é, a média condicional do erro i, dado um erro j qualquer é zero.
+Tal condição garante que a média condicional do erro dadas as variáveis explicativas é igual a zero. Também conhecida como exogeneidade estrita, seu significado é de que as variáveis explicativas não possuem relação com o termo de perturbação (\ref{eqn:exo}). Além disso, é importante ressaltar que, como a média condicional do erro é zero, sua média incondicional também é zero, o que é garantido pela lei das expectativas iteradas (\ref{eqn:expectations}). Essa é uma forte implicação que garante que uma estimação pelo MCRL sempre acerta na média. Ademais, o MCRL garante a aleatoriedade dos resíduos, isto é, a média condicional do erro $i$, dado um erro $j$ qualquer é zero.
+
+```{=tex}
+\begin{equation}
+\label{eqn:exo}
+E[\mbfvarepsilon | \textbf{X}] = \begin{bmatrix} E[\varepsilon_1 | \textbf{X}] \\ E[\varepsilon_2 | \textbf{X}] \\ \vdots \\ E[\varepsilon_n | \textbf{X}] \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ \vdots \\ 0 \end{bmatrix}
+\end{equation}
+```
+
+```{=tex}
+\begin{equation}
+\label{eqn:expectations}
+E[\varepsilon_i] = E_{\textbf{X}}[E[\varepsilon | \textbf{X}]] = E_{\textbf{X}}[0] = 0
+\end{equation}
+```
 
 ## Homocedasticidade e não autocorrelação residual
 
-Essa quarta hipótese define que a variância condicional do erro é constante e que a covariância condicional dos erros é zero. A variância constante é conhecida como homocedasticidade, o que significa que para qualquer ponto da amostra, a variância sempre será a mesma. Quando isso não ocorre, dizemos que a variância é heterocedástica. 
+Essa quarta hipótese define que a variância condicional do erro é constante (\ref{eqn:var}) e que a covariância condicional dos erros é zero (\ref{eqn:cov}). A variância constante é conhecida como homocedasticidade, o que significa que para qualquer ponto da amostra, a variância sempre será a mesma. Quando isso não ocorre, dizemos que a variância é heterocedástica.
 
-Já o fato da covariância condicional dor erros ser igual a zero define a não autocorrelação entre os termos de perturbação. Em termos matriciais, temos que a matriz de erros vezes a sua transposta é igual a matriz identidade vezes a variância dos resíduos. Vale ressaltar que isso não implica que as observações não são autocorrelacionadas. 
+```{=tex}
+\begin{equation}
+\label{eqn:var}
+Var[\varepsilon_i | \textbf{X}] = \sigma^2, \hspace{1cm} \forall i \in \{1, \dots, n\}.
+\end{equation}
+```
+
+```{=tex}
+\begin{equation}
+\label{eqn:cov}
+Cov[\varepsilon_i, \varepsilon_j | \textbf{X}] = 0, \hspace{1cm} \forall i \neq j.
+\end{equation}
+```
+
+Já o fato da covariância condicional dor erros ser igual a zero define a não autocorrelação entre os termos de perturbação. Em termos matriciais, temos que a matriz de erros vezes a sua transposta é igual a matriz identidade vezes a variância dos resíduos (\ref{eqn:ee}). Vale ressaltar que isso não implica que as observações não são autocorrelacionadas.
+
+```{=tex}
+\begin{equation}
+\label{eqn:ee}
+E[\mbfvarepsilon \mbfvarepsilon' | \textbf{X}] =
+\begin{bmatrix}
+E[\varepsilon_1 \varepsilon_1 | \textbf{X}] && E[\varepsilon_1 \varepsilon_2 | \textbf{X}] && \cdots && E[\varepsilon_1 \varepsilon_n | \textbf{X}] \\
+E[\varepsilon_2 \varepsilon_1 | \textbf{X}] && E[\varepsilon_2 \varepsilon_2 | \textbf{X}] && \cdots && E[\varepsilon_2 \varepsilon_n | \textbf{X}] \\
+\vdots && \vdots && \ddots && \vdots \\
+E[\varepsilon_n \varepsilon_1 | \textbf{X}] && E[\varepsilon_n \varepsilon_2 | \textbf{X}] && \cdots && E[\varepsilon_n \varepsilon_n | \textbf{X}]
+\end{bmatrix} =
+\begin{bmatrix}
+\sigma^2 && 0 && \cdots && 0 \\
+0 && \sigma^2 && \cdots && 0 \\
+\vdots && \vdots && \ddots && \vdots \\
+0 && 0 && \cdots && \sigma^2
+\end{bmatrix}
+\end{equation}
+```
 
 ## Processo Gerador dos dados para a regressão
 
-A quinta premissa se refere a não aleatoriedade do vetor de variáveis explicativas, em outras palavras, ele é não estocástico. Isso quer dizer que o vetor de variáveis explicativas é gerado exogenamente. No entanto, usualmente isso é de difícil aplicação, haja vista que o vetor x tende a ser aleatório, tal qual o vetor y. Desse modo, uma forma alternativa é assumir x como um vetor aleatório e tratar da distribuição conjunta de x e y. Desse modo, essa premissa firma que x pode ser fixo ou aleatório. 
+A quinta premissa se refere a não aleatoriedade do vetor de variáveis explicativas, em outras palavras, ele é não estocástico. Isso quer dizer que o vetor de variáveis explicativas é gerado exogenamente. No entanto, usualmente isso é de difícil aplicação, haja vista que o vetor $\textbf{X}$ tende a ser aleatório, tal qual o vetor $\textbf{Y}$. Desse modo, uma forma alternativa é assumir $\textbf{X}$ como um vetor aleatório e tratar da distribuição conjunta de $\textbf{X}$ e $\textbf{Y}$. Desse modo, essa premissa firma que $\textbf{X}$ pode ser fixo ou aleatório.
 
 ## Normalidade dos erros
 
-Implica que os termos de perturbação são normalmente distribuídos, possuindo média zero e variância constante. Essa premissa é bastante razoável, haja vista que o teorema do limite central garante essa normalidade, pelo menos, assintoticamente. Todavia, essa suposição geralmente não é necessária para obter a maioria dos resultados em uma regressão linear. 
+Implica que os termos de perturbação são normalmente distribuídos, possuindo média zero e variância constante (\ref{eqn:normal}). Essa premissa é bastante razoável, haja vista que o teorema do limite central garante essa normalidade, pelo menos, assintoticamente. Todavia, essa suposição geralmente não é necessária para obter a maioria dos resultados em uma regressão linear. 
 
-Finalizada esta parte, apresentou-se as premissas do MCRL, as quais servem como base para a construção de um modelo econométrico. O objetivo seguinte será descrever métodos de estimação de modelos, dentre eles, o famoso e amplamente utilizado, método de mínimos quadrados ordinários. 
+Finalizada esta parte, apresentou-se as premissas do MCRL, as quais servem como base para a construção de um modelo econométrico. O objetivo seguinte será descrever métodos de estimação de modelos, dentre eles, o famoso e amplamente utilizado, método de mínimos quadrados ordinários.
+
+```{=tex}
+\begin{equation}
+\label{eqn:normal}
+\varepsilon | \textbf{X} \sim N[\textbf{0}, \sigma^2 \textbf{I}]
+\end{equation}
+```
+
+A figura \ref{fig:linearmodel} representa bem o Modelo Clássico de Regressão Linear, com os pressupostos definidos acima:
+
+\fig{O Modelo Clássico de Regressão Linear}{fig:linearmodel}{images/linearModel.png}{Greene (2019)}
 
 # REGRESSÃO POR MÍNIMOS QUADRADOS 
 
-# ESTIMAÇÃO
+# APLICAÇÃO
+
+Para aplicar as questões tratadas nas últimas seções, vamos estimar um modelo linear por MQO, utilizando a linguagem R e os dados da REGIC 2018. 
 
 Carregando pacotes:
 ```{r}
 library(readxl)
 library(dplyr)
+library(ggplot2)
+library(stargazer)
 ```
 
 Carregando a base da REGIC 2018 e ajustando as variáveis de interesse:
@@ -144,26 +213,92 @@ df_regic$pib_pc <- df_regic$pib / df_regic$populacao
 
 ## Análise Descritiva
 
-```{r}
+```{r, echo=FALSE}
 #| fig-cap: Histograma do PIB per capita
 
 ## PIB per capita
-hist(df_regic$pib_pc, freq=FALSE, ylim=c(0,.07))
-lines(density(df_regic$pib_pc), lwd=2)
+ggplot2::ggplot(df_regic, aes(x = pib_pc)) +
+  ggplot2::geom_histogram(
+    aes(y = ..density..),
+    fill = "#00b4ef",
+    color = "#ffffff",
+  ) +
+  ggplot2::geom_density(color="#bf80ff", size=0.5) +
+  ggplot2::ylim(0, 0.075) +
+  ggplot2::labs(
+    x = "PIB per capita",
+    y = "Densidade",
+  ) +
+  ggplot2::theme_classic() +
+  ggplot2::theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line = element_line(size = 0.3),
+    title = element_text(size = 8, colour = "#222222"),
+    plot.title = element_text(hjust = 0.5)
+  )
 ```
 
-```{r}
-summary(df_regic$pib_pc)
+```{r echo=FALSE, results='asis', warning=FALSE}
+#| label: sum-pib
+#| tbl-cap: Estatísticas descritivas do PIB per capita
+
+summary_pib <- data.frame(as.list(summary(df_regic$pib_pc)))
+names(summary_pib) <- names(summary(df_regic$pib_pc))
+
+stargazer::stargazer(
+  summary_pib,
+  header=FALSE,
+  type='latex',
+  summary = FALSE,
+  rownames = FALSE,
+  style = "aer",
+  notes = "Fonte: Elaboração própria.",
+  digits = 2,
+  font.size = "small",
+  no.space = TRUE
+)
 ```
 
-```{r}
+```{r, echo=FALSE}
 #| fig-cap: Coeficiente de Intensidade da Gestão Empresarial (CI)
-hist(df_regic$log_cige, freq=FALSE)
-lines(density(df_regic$log_cige), lwd=2)
+ggplot2::ggplot(df_regic, aes(x = cige)) +
+  ggplot2::geom_histogram(
+    aes(y = ..density..),
+    fill = "#00b4ef",
+    color = "#ffffff",
+  ) +
+  ggplot2::geom_density(color="#bf80ff", size=0.5) +
+  ggplot2::labs(
+    x = "CI",
+    y = "Densidade",
+  ) +
+  ggplot2::theme_classic() +
+  ggplot2::theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line = element_line(size = 0.3),
+    title = element_text(size = 8, colour = "#222222"),
+    plot.title = element_text(hjust = 0.5)
+  )
 ```
 
-```{r}
-summary(df_regic$log_cige)
+```{r, echo=FALSE, results='asis'}
+summary_ci <- data.frame(as.list(summary(df_regic$cige)))
+names(summary_ci) <- names(summary(df_regic$cige))
+
+stargazer::stargazer(
+  summary_ci,
+  header=FALSE,
+  type='latex',
+  summary = FALSE,
+  rownames = FALSE,
+  style = "aer",
+  notes = "Fonte: Elaboração própria.",
+  digits = 2,
+  font.size = "small",
+  no.space = TRUE
+)
 ```
 
 ```{r}
