@@ -33,6 +33,8 @@ execute:
   warning: false
 header-includes:
   - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},fontsize=\footnotesize}
+nocite: |
+  @heiss, @wooldridge, @greene, @hansen
 format:
     pdf:
         template-partials:
@@ -200,7 +202,7 @@ y_n
 
 ```{=tex}
 \begin{equation}
-CPO: \hspace{1cm} \frac{\partial S(\mbfbeta)}{\mbfbeta} = -2\textbf{X'Y} + 2\textbf{X'X} \mbfbeta = \textbf{0}
+CPO: \hspace{1cm} \frac{\partial S(\mbfbeta)}{\partial \mbfbeta} = -2\textbf{X'Y} + 2\textbf{X'X} \mbfbeta = \textbf{0}
 \end{equation}
 ```
 
@@ -220,7 +222,7 @@ Essa estimação nada mais é que as condições de primeira ordem do modelo. Ne
 
 Além disso, sob a hipótese de homocedasticidade, tratada anteriormente no MCRL, existe um teorema, conhecido como teorema de Gauss-Markov, o qual garante que os estimadores de mínimos quadrados são os melhores estimadores não viesados da classe dos lineares. Todavia, esse teorema é muito restrito, haja vista as limitações impostas, como homocedasticidade e exogeneidade estrita, haja vista a ausência de viés. Nesse sentido, é mais vantajoso analisar as propriedades assintóticas dos estimadores, que tratam de convergência em probabilidade e flexibilizam mais o modelo estimado. 
 
-Conforme Wooldrige (2010), para um estimador ser consistente, são necessárias duas premissas. A primeira implica que a covariância entre o resíduo e o vetor de variáveis explicativas seja igual a zero e essa é uma versão mais fraca da exogeneidade (\ref{eqn:cov}). Por outro lado, a segunda premissa diz que a multiplicação matricial de $\textbf{X}$ e sua transposta tem que ser igual a ordem de $\textbf{X}$ (\ref{eqn:posto}), ou seja, implica independência linear.
+Conforme Wooldrige (2010), para um estimador ser consistente, são necessárias duas premissas. A primeira implica que a covariância entre o resíduo e o vetor de variáveis explicativas seja igual a zero e essa é uma versão mais fraca da exogeneidade (\ref{eqn:cov}). Por outro lado, a segunda premissa diz que a multiplicação matricial de $\textbf{X}$ e sua transposta tem que ser igual a ordem de $\textbf{X}$ (\ref{eqn:posto}), implicando independência linear.
 
 ```{=tex}
 \label{eqn:cov}
@@ -236,12 +238,73 @@ E[\textbf{X'X}] = k
 \end{equation}
 ```
 
-# ESTIMAÇÃO
+## Ajuste do modelo
+
+Se chamarmos de $\hat{\mbfbeta}$ o vetor de parâmetros estimados por MQO, podemos obter o vetor $\hat{\textbf{Y}}$ de valores estimados de $\textbf{Y}$. Todos esses valores estimados estarão necessariamente sobre a reta de regressão do MQO. A diferença entre $\hat{\textbf{Y}}$ e $\textbf{Y}$ será justamente o vetor de resíduos $\hat{\mbfvarepsilon}$. Ou seja, $\textbf{Y} - \hat{\textbf{Y}} = \hat{\mbfvarepsilon}$. Logo, se pensarmos em cada observação $i$, $\hat{\varepsilon_i}$ é a diferença entre $y_i$ e $\hat{y_i}$. Se $\hat{\varepsilon_i} > 0$, a reta subestima $y_i$; se $\hat{\varepsilon_i} < 0$ a reta superestima $y_i$; se $\hat{\varepsilon_i} = 0$, a reta passa exatamente sobre $y_i$.
+
+Pela propriedade da equação (\ref{eqn:expectations}), temos que a média dos resíduos é zero. De forma equivalente, a média dos valores estimados é a mesma média amostral dos valores observados, $\overline{\hat{y}} = \overline{y}$. Dada essa característica, podemos definir medidas de perturbação em relação à média amostral $\hat{y}$:
+
+```{=tex}
+\label{eqn:sqt}
+\begin{equation}
+SQT = \sum^{n}_{i = 1} (y_i - \overline{y})^2
+\end{equation}
+```
+
+```{=tex}
+\label{eqn:sqe}
+\begin{equation}
+SQE = \sum^{n}_{i = 1} (\hat{y_i} - \overline{y})^2
+\end{equation}
+```
+
+```{=tex}
+\label{eqn:sqr}
+\begin{equation}
+SQR = \sum^{n}_{i = 1} \hat{\varepsilon_{i}}^2
+\end{equation}
+```
+
+$SQT$ (Soma dos quadrados totais) mede a dispersão das $i$ observações ($y_i$), tendo a média amostral como centro. $SQE$ (Soma dos quadrados estimados) mede a dispersão das $i$ estimativas de $y$ ($\hat{y_i}$). $SQR$ (Soma dos quadrados dos resídiuos) mede a variação dos erros estimados ($\hat{\varepsilon_i}$). A variação total em $y$ pode ser sempre espressada como a soma da variação explicada e da variação não explicada (ou dos resíduos):
+
+```{=tex}
+\label{eqn:soma}
+\begin{equation}
+SQT = SQE + SQR
+\end{equation}
+```
+
+### Grau de Ajuste
+
+As definições acima nos ajudarão à definir uma medida de ajuste do modelo, ou seja, dizer quão bem nossas variáveis independentes ($\textbf{X}$) explicam as observações da variável dependente ($\textbf{Y}$).
+
+Se assumirmos que $SQT \neq 0$, podemos definir uma medida conhecida como $R^2$ (coeficiente de determinação), que basicamente é uma proporção entre a variação explicada (SQE) e a variação total (SQT). Em outras palavras, é uma medida que diz quanto da variação total em $y$ foi explicada pelas variáveis $x$.
+
+```{=tex}
+\label{eqn:rquadrado}
+\begin{equation}
+R^2 = \frac{SQE}{SQT} = 1 - \frac{SQR}{SQT}
+\end{equation}
+```
+
+$$R^2 \in [0, 1]$$
+
+Como $SQE \leq SQT$, $R^2$ sempre estará entre $0$ e $1$. Graficamente falando, quanto mais próximo de $1$, mais próximas as observações estarão da reta de regressão.
+
+# APLICAÇÃO
+
+Para aplicar as questões tratadas nas últimas seções, vamos estimar um modelo linear por MQO, utilizando a linguagem R e os dados da REGIC 2018 para municípios de Minas Gerais. 
 
 Carregando pacotes:
 ```{r}
 library(readxl)
 library(dplyr)
+library(ggplot2)
+library(stargazer)
+library(geobr)
+library(ggspatial)
+library(ggrepel)
+library(scatterplot3d)
 ```
 
 Carregando a base da REGIC 2018 e ajustando as variáveis de interesse:
@@ -280,71 +343,327 @@ df_regic <- readxl::read_xlsx(
     "log_cgp" = ifelse(as.numeric(cgp) < 1, 0, log(as.numeric(cgp)))
   )
 
-df_regic[is.na(df_regic)] <- 0
+df_regic <- na.omit(df_regic)
 
 df_regic$pib_pc <- df_regic$pib / df_regic$populacao
 ```
 
+```{r echo=FALSE}
+
+palette1 <- c("#264653", "#2a9d8f", "#e9c46a", "#f4a261","#e76f51")
+
+municipios <- geobr::read_municipality(code_muni = 31, showProgress = FALSE)
+
+municipios <- municipios |> dplyr::left_join(
+  df_regic,
+  by = c("code_muni" = "COD_CIDADE")
+)
+
+pib_map <- ggplot2::ggplot(municipios) +
+  ggplot2::geom_sf(mapping = aes(fill = pib_pc), lwd = 0, colour = NA) +
+  ggplot2::scale_fill_gradientn(
+    colors = palette1,
+    trans = "log1p",
+    name = "PIB per capita",
+    na.value = "grey80",
+  ) +
+  theme_void() +
+  theme(
+    text = element_text(face = "plain"),
+    legend.title = element_text(size = 14, face = "bold"),
+    legend.text = element_text(size = 12, face = "plain"),
+  ) +
+  annotation_scale(location = "bl", line_width = 0.4) +
+  annotation_north_arrow(
+    location = "br",
+    style = north_arrow_fancy_orienteering(),
+    height = unit(1, "cm"),
+    width = unit(1, "cm")
+  )
+
+ggsave("exports/pibmap.pdf", plot = pib_map, width = 5000, height = 5000, units = "px", dpi = 320)
+
+cige_map <- ggplot2::ggplot(municipios) +
+  ggplot2::geom_sf(mapping = aes(fill = cige), lwd = 0, colour = NA) +
+  ggplot2::scale_fill_gradientn(
+    colors = palette1,
+    trans = "log1p",
+    name = "CIGE",
+    na.value = "grey80",
+  ) +
+  theme_void() +
+  theme(
+    text = element_text(face = "plain"),
+    legend.title = element_text(size = 14, face = "bold"),
+    legend.text = element_text(size = 12, face = "plain"),
+  ) +
+  annotation_scale(location = "bl", line_width = 0.4) +
+  annotation_north_arrow(
+    location = "br",
+    style = north_arrow_fancy_orienteering(),
+    height = unit(1, "cm"),
+    width = unit(1, "cm")
+  )
+
+ggsave("exports/cigemap.pdf", plot = cige_map, width = 5000, height = 5000, units = "px", dpi = 320)
+
+cgp_map <- ggplot2::ggplot(municipios) +
+  ggplot2::geom_sf(mapping = aes(fill = cgp), lwd = 0, colour = NA) +
+  ggplot2::scale_fill_gradientn(
+    colors = palette1,
+    trans = "log1p",
+    name = "CGP",
+    na.value = "grey80",
+  ) +
+  theme_void() +
+  theme(
+    text = element_text(face = "plain"),
+    legend.title = element_text(size = 14, face = "bold"),
+    legend.text = element_text(size = 12, face = "plain"),
+  ) +
+  annotation_scale(location = "bl", line_width = 0.4) +
+  annotation_north_arrow(
+    location = "br",
+    style = north_arrow_fancy_orienteering(),
+    height = unit(1, "cm"),
+    width = unit(1, "cm")
+  )
+
+ggsave("exports/cgpmap.pdf", plot = cgp_map, width = 5000, height = 5000, units = "px", dpi = 320)
+```
+
+Foi necessário excluir os registros que tinham alguma variável de interesse NULA (NA). Optou-se por não substituir os *NA* por valores arbitrários, como zero ou qualquer outro valor, pois causaria um grande viés na regressão, visto que se tratam municípios que não tiverem essas variáveis mensuradas.
+
 ## Análise Descritiva
 
-```{r}
-#| fig-cap: Histograma do PIB per capita
+Nesta seção, uma análise descritiva abrangente das variáveis em questão será conduzida, visando fornecer uma compreensão profunda de seus padrões, distribuições e relações. Esta abordagem permite não apenas a caracterização detalhada de cada variável individualmente, mas também a identificação de tendências e padrões globais dentro do conjunto de dados.
 
-## PIB per capita
-hist(df_regic$pib_pc, freq=FALSE, ylim=c(0,.07))
-lines(density(df_regic$pib_pc), lwd=2)
+A Tabela @tbl-sum-vars contém as principais estatísticas descritivas das variáveis analisadas (PIB per capita, Centralidade da Gestão Pública (CGP) e Coeficiente de Intensidade da Gestão Empresarial (CIGE)) para as 168 observações (municípios) restantes na base:
+```{r, results='asis', echo=FALSE}
+#| label: tbl-sum-vars
+#| tbl-cap: Estatísticas descritivas das variáveis
+summary_vars <- data.frame(as.list(summary(df_regic$cige))) |>
+  rbind(data.frame(as.list(summary(df_regic$cgp)))) |>
+  rbind(data.frame(as.list(summary(df_regic$pib_pc))))
+
+summary_vars <- cbind(c("CIGE", "CGP", "PIBpc"), summary_vars)
+
+names(summary_vars) <- c("Variável", names(summary(df_regic$cige)))
+
+stargazer::stargazer(
+  summary_vars,
+  header=FALSE,
+  type='latex',
+  summary = FALSE,
+  rownames = FALSE,
+  style = "aer",
+  notes = "Fonte: Elaboração própria.",
+  digits = 2,
+  font.size = "small",
+  no.space = TRUE
+)
+```
+
+Abaixo, plotamos os histogramas dessas variáveis:
+```{r, echo=FALSE}
+#| fig-cap: Histograma do PIB per capita dos municípios de Minas Gerais (2018)
+
+ggplot2::ggplot(df_regic, aes(x = pib_pc)) +
+  ggplot2::geom_histogram(
+    aes(y = ..density..),
+    fill = "#00b4ef",
+    color = "#ffffff",
+  ) +
+  ggplot2::geom_density(color="#bf80ff", size=0.5) +
+  ggplot2::ylim(0, 0.075) +
+  ggplot2::labs(
+    x = "PIB per capita",
+    y = "Densidade",
+  ) +
+  ggplot2::theme_classic() +
+  ggplot2::theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line = element_line(size = 0.3),
+    title = element_text(size = 8, colour = "#222222"),
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+```{r, echo=FALSE}
+#| fig-cap: Histograma do Coeficiente de Intensidade da Gestão Empresarial (CIGE) dos municípios de Minas Gerais (2018)
+ggplot2::ggplot(df_regic, aes(x = cige)) +
+  ggplot2::geom_histogram(
+    aes(y = ..density..),
+    fill = "#00b4ef",
+    color = "#ffffff",
+  ) +
+  ggplot2::geom_density(color="#bf80ff", size=0.5) +
+  ggplot2::labs(
+    x = "CIGE",
+    y = "Densidade",
+  ) +
+  ggplot2::theme_classic() +
+  ggplot2::theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line = element_line(size = 0.3),
+    title = element_text(size = 8, colour = "#222222"),
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+```{r, echo=FALSE}
+#| fig-cap: Histograma da Centralidade da Gestão Pública (CGP) dos municípios de Minas Gerais (2018)
+
+ggplot2::ggplot(df_regic, aes(x = cgp)) +
+  ggplot2::geom_histogram(
+    aes(y = ..density..),
+    fill = "#00b4ef",
+    color = "#ffffff",
+  ) +
+  ggplot2::geom_density(color="#bf80ff", size=0.5) +
+  ggplot2::labs(
+    x = "CGP",
+    y = "Densidade",
+  ) +
+  ggplot2::theme_classic() +
+  ggplot2::theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line = element_line(size = 0.3),
+    title = element_text(size = 8, colour = "#222222"),
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+Podemos ver a correlação entre as variáveis por meio de um mapa de calor obtido da matriz de correlação:
+```{r, results='asis'}
+#| label: fig-cor-heatmap
+#| fig-cap: "Mapa de calor da matriz de correlação."
+
+# Matriz com as variáveis [Y|X]
+matrix <- df_regic |>
+  dplyr::select("pib_pc", "cige", "cgp") |>
+  as.matrix.data.frame()
+
+
+matrix |> cor() |> heatmap()
+```
+
+Outra medida importante é a de covariância entre as variáveis, descrita na matriz de covariância abaixo (variância na diagonal principal):
+
+```{r}
+matrix |> cov() |> round(2)
+```
+
+Abaixo plotamos os *boxplots* das variáveis utilizadas:
+```{r}
+#| label: fig-box-cgp
+#| fig-cap: "Boxplot da Centralidade da Gestão Pública (CGP) dos municípios de Minas Gerais (2018)"
+boxplot(df_regic$cgp)
 ```
 
 ```{r}
-summary(df_regic$pib_pc)
+#| label: fig-box-cige
+#| fig-cap: "Boxplot do Coeficiente de Intensidade da Gestão Empresarial (CIGE) dos municípios de Minas Gerais (2018)"
+boxplot(df_regic$cige)
 ```
 
 ```{r}
-#| fig-cap: Coeficiente de Intensidade da Gestão Empresarial (CI)
-hist(df_regic$log_cige, freq=FALSE)
-lines(density(df_regic$log_cige), lwd=2)
+#| label: fig-box-pib
+#| fig-cap: "Boxplot do PIB per capita dos municípios de Minas Gerais (2018)"
+boxplot(df_regic$cige)
 ```
+
+A visualização geográfica das variáveis do modelo (para o caso de municípios) é essencial para compreender, com clareza, onde os processos estão acontecendo:
+
+\fig{PIB per capita dos municípios de Minas Gerais - REGIC 2018}{fig:pibpc}{exports/pibmap.pdf}{Elaboração própria.}
+
+\fig{CIGE dos municípios de Minas Gerais - REGIC 2018}{fig:cige}{exports/cigemap.pdf}{Elaboração própria.}
+
+\fig{CGP dos municípios de Minas Gerais - REGIC 2018}{fig:cgp}{exports/cgpmap.pdf}{Elaboração própria.}
+
+Por fim, podemos plotar alguns gráficos de dispersão para esboçar a relação entre as variáveis do modelo:
+
+```{r, echo=FALSE, message=FALSE, result='asis'}
+#| label: fig-cige-scatter
+#| fig-cap: "PIB per capita x CIGE (Municípios de Minas Gerais - REGIC 2018)"
+
+muni <- municipios[order(-municipios$pib_pc), ]
+top3 <- muni$name_muni[1:3]
+
+muni <- municipios[order(municipios$pib_pc), ]
+low3 <- muni$name_muni[1:3]
+
+ggplot2::ggplot(municipios,  aes(x = log(cige), y = log(pib_pc), label = name_muni)) +
+  ggplot2::geom_point(mapping = aes(colour = pib_pc)) +
+  ggplot2::scale_color_gradientn(
+    colors = palette1,
+    trans = "log1p",
+    name = "PIB per capita",
+  ) +
+  ggplot2::labs(
+    x = "Log do CIGE",
+    y = "Log do PIB per capita",
+  ) +
+  ggrepel::geom_text_repel(
+    data = subset(
+      municipios,
+      name_muni %in% c(top3, low3)
+    ),
+    box.padding = 0.5,
+    size = 3
+  ) +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(
+    text = ggplot2::element_text(size = 10, face = "bold"),
+    legend.text = ggplot2::element_text(size = 10, face = "plain")
+  )
+```
+
+```{r, echo=FALSE, message=FALSE, result='asis'}
+#| label: fig-cgp-scatter
+#| fig-cap: "PIB per capita x CGP (Municípios de Minas Gerais - REGIC 2018)"
+
+muni <- municipios[order(-municipios$pib_pc), ]
+top3 <- muni$name_muni[1:3]
+
+muni <- municipios[order(municipios$pib_pc), ]
+low3 <- muni$name_muni[1:3]
+
+ggplot2::ggplot(municipios,  aes(x = log(cgp), y = log(pib_pc), label = name_muni)) +
+  ggplot2::geom_point(mapping = aes(colour = pib_pc)) +
+  ggplot2::scale_color_gradientn(
+    colors = palette1,
+    trans = "log1p",
+    name = "PIB per capita",
+  ) +
+  ggplot2::labs(
+    x = "Log do CGP",
+    y = "Log do PIB per capita",
+  ) +
+  ggrepel::geom_text_repel(
+    data = subset(
+      municipios,
+      name_muni %in% c(top3, low3)
+    ),
+    box.padding = 0.5,
+    size = 3
+  ) +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(
+    text = ggplot2::element_text(size = 10, face = "bold"),
+    legend.text = ggplot2::element_text(size = 10, face = "plain")
+  )
+```
+
+## Análise de Regressão
+
+Com as mesmas operações definidas na seção sobre Regressão Por Mínimos Quadrados, vamos estimar um modelo linear que tenta explicar o $ln(PIBpc)$ (logaritmo natural do PIB per capita) de municípios mineiros, com variáveis que medem intensidade de gestão empresarial (CIGE) e nível de centralidade da gestão pública (CGP).
 
 ```{r}
-summary(df_regic$log_cige)
-```
-
-```{r}
-#| fig-cap: Centralidade de Gestão Pública (CGP)
-hist(df_regic$log_cgp, freq=FALSE)
-lines(density(df_regic$log_cgp), lwd=2)
-```
-
-```{r}
-summary(df_regic$log_cige)
-```
-
-<!-- ## Presença de banco público
-table(df_regic$banco_publico)
-barplot(table(df_regic$banco_publico))
-summary(df_regic$banco_publico)
-
-## Correlação entre PIBpc e CGP
-cor(df_regic$pib_pc, df_regic$cgp)
-
-## Correlação entre PIBpc e CIGE
-cor(df_regic$pib_pc, df_regic$cige)
-
-## Correlação entre PIBpc e Presença de Banco Público
-cor(df_regic$pib_pc, df_regic$banco_publico)
-
-## Correlação entre as variáveis explicativas:
-cor(df_regic$cgp, df_regic$cige)
-cor(df_regic$cgp, df_regic$banco_publico)
-cor(df_regic$cige, df_regic$banco_publico)
-
-## Boxplot
-boxplot(df_regic$pib_pc~df_regic$banco_publico)
-
-## Scatter Plot
-plot(y = log(df_regic$pib_pc), x = df_regic$log_cige)
-
-## MQO manual
+# Regressão simples
 covxy <- cov(df_regic$log_cige, log(df_regic$pib_pc))
 varx <- var(df_regic$log_cige)
 mediay <- mean(log(df_regic$pib_pc))
@@ -353,15 +672,119 @@ b1 <- covxy/varx
 
 b0 <- mediay - b1*mediax
 
-formula <- log(pib_pc) ~ log_cige + log_cgp + banco_publico
+print(paste0("Intercepto: ", round(b0, 2)))
+print(paste0("Coeficiente estimado: ", round(b1, 2)))
+```
 
-mqo <- lm(formula, df_regic)
-summary(mqo) -->
+Com esses coeficientes já é possível traçar uma reta de regressão no gráfico:
 
-@heiss
-@greene
-@Wooldrige
-@Hansen
+```{r, echo=FALSE}
+ggplot2::ggplot(municipios,  aes(x = log(cige), y = log(pib_pc), label = name_muni)) +
+  ggplot2::geom_point(mapping = aes(colour = pib_pc)) +
+  ggplot2::geom_abline(intercept = b0, slope = b1, color = "red") +
+  ggplot2::scale_color_gradientn(
+    colors = palette1,
+    trans = "log1p",
+    name = "PIB per capita",
+  ) +
+  ggplot2::labs(
+    x = "Log do CIGE",
+    y = "Log do PIB per capita",
+  ) +
+  ggrepel::geom_text_repel(
+    data = subset(
+      municipios,
+      name_muni %in% c(top3, low3)
+    ),
+    box.padding = 0.5,
+    size = 3
+  ) +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(
+    text = ggplot2::element_text(size = 10, face = "bold"),
+    legend.text = ggplot2::element_text(size = 10, face = "plain")
+  )
+```
+
+Para verificar o ajuste do modelo, podemos calcular o $R^2$, dado que $R^2 = Var(\hat{y})/Var(y)$:
+
+```{r}
+# Cálculo do R-quadrado
+y <- log(df_regic$pib_pc)
+x <- log(df_regic$cige)
+y.hat <- b0 + b1*x
+r2 <- var(y.hat)/var(y)
+r2
+```
+
+Esse resultado indica que cerca de $16,10\%$ da variação do log do PIB per capita dos municípios da amostra é explicado pelo log do Coeficiente de Interação da Gestão Empresarial (CIGE) desses municípios.
+
+## Análise de Regressão Múltipla
+
+Vamos acrescentar mais uma variável no modelo anterior e estimar novamente os parâmetros por meio de álgebra matricial:
+
+```{r}
+# Número de observações da amostra
+n <- nrow(df_regic)
+
+# Número de variáveis independentes
+k <- 2
+
+# Matrix de variáveis independentes
+X <- matrix(1, nrow = n, ncol = 3) # Coluna de 1 (intercepto)
+X[ ,2] <- log(df_regic$cige) # CIGE
+X[ ,3] <- log(df_regic$cgp) # CGP
+
+# Vetor de variável observada
+Y <- as.matrix(log(df_regic$pib_pc))
+
+# Vetor de parâmetros estimados
+bhat <- solve(t(X) %*% X) %*% t(X) %*% Y
+
+# Vetor de resíduos estimados
+uhat <- y - X %*% bhat
+
+# Variância dos resíduos
+sigma2hat <- as.numeric (t(uhat) %*% uhat / (nrow(df_regic)-k-1))
+
+# Matriz var-cov dos coeficientes
+varbetahat <- sigma2hat * solve(t(X) %*% X)
+erropadraobeta <- sqrt (diag(varbetahat))
+
+bhat
+sigma2hat
+varbetahat
+erropadraobeta
+```
+
+Com apenas 2 variáveis independentes ainda é possível ver graficamente essa regressão, e agora, ao invés de uma reta de regressão, temos um plano de regressão:
+
+```{r, echo=FALSE, warning=FALSE}
+mqo <- lm(log(pib_pc) ~ log(cige) + log(cgp), df_regic)
+grafico <- scatterplot3d(
+  log(df_regic$cige), log(df_regic$cgp), log(df_regic$pib_pc),
+  main = "Regressão Múltipla",
+  xlab = "CIGE",
+  ylab = "CGP",
+  zlab = "PIB per capita",
+  color = "blue"
+)
+
+y.hat <- X %*% bhat
+
+grafico$plane3d(mqo, col = "red", alpha = 0.5, draw_polygon = T, draw_lines = T)
+```
+
+Como fizemos para a regressão simples, podemos calcular o ajuste $R^2$ para o modelo de regressão múltipla:
+
+```{r}
+r2 <- var(y.hat)/var(y)
+r2
+```
+
+Esse resultado indica que cerca de $21,55\%$ da variação do log do PIB per capita dos
+municípios da amostra é explicada pela combinação linear entre o log do Coeficiente de Interação da Gestão Empresarial(CIGE) e o log do nível de Centralidade da Gestão Pública (CGP) desses municípios.
+
 \newpage
 
 # REFERÊNCIAS
