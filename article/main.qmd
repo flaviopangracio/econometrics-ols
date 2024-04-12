@@ -176,10 +176,10 @@ y_n
 \end{bmatrix}_{n \times 1}
 =
 \begin{bmatrix}
-1 && x_{11} && \cdots && x_{1k} \\
-1 && x_{21} && \cdots && x_{2k} \\
+1 && x_{12} && \cdots && x_{1k} \\
+1 && x_{22} && \cdots && x_{2k} \\
 \vdots && \vdots && \ddots && \vdots \\
-1 && x_{n1} && \cdots && x_{nk}
+1 && x_{n2} && \cdots && x_{nk}
 \end{bmatrix}_{n \times k}
 \cdot
 \begin{bmatrix}
@@ -193,8 +193,26 @@ y_n
 \varepsilon_1 \\
 \varepsilon_2 \\
 \vdots \\
-\varepsilon_{n \times 1}
-\end{bmatrix}
+\varepsilon_{n}
+\end{bmatrix}_{n \times 1}
+\end{equation}
+```
+
+```{=tex}
+\begin{equation}
+CPO: \hspace{1cm} \frac{\partial S(\mbfbeta)}{\mbfbeta} = -2\textbf{X'Y} + 2\textbf{X'X} \mbfbeta = \textbf{0}
+\end{equation}
+```
+
+```{=tex}
+\begin{equation}
+\implies \textbf{X'X} \mbfbeta = \textbf{X'Y}
+\end{equation}
+```
+
+```{=tex}
+\begin{equation}
+\implies \mbfbeta = (\textbf{X'X})^{-1}\textbf{X'Y}
 \end{equation}
 ```
 
@@ -202,8 +220,21 @@ Essa estimação nada mais é que as condições de primeira ordem do modelo. Ne
 
 Além disso, sob a hipótese de homocedasticidade, tratada anteriormente no MCRL, existe um teorema, conhecido como teorema de Gauss-Markov, o qual garante que os estimadores de mínimos quadrados são os melhores estimadores não viesados da classe dos lineares. Todavia, esse teorema é muito restrito, haja vista as limitações impostas, como homocedasticidade e exogeneidade estrita, haja vista a ausência de viés. Nesse sentido, é mais vantajoso analisar as propriedades assintóticas dos estimadores, que tratam de convergência em probabilidade e flexibilizam mais o modelo estimado. 
 
-Conforme Wooldrige (2010), para um estimador ser consistente, são necessárias duas premissas. A primeira implica que a covariância entre o resíduo e o vetor de variáveis explicativas seja igual a zero e essa é uma versão mais fraca da exogeneidade. Por outro lado, a segunda premissa diz que a multiplicação matricial de x e sua transposta tem que ser igual a ordem de x, ou seja, implica independência linear. 
-(Colocar formula - livro wooldrige)
+Conforme Wooldrige (2010), para um estimador ser consistente, são necessárias duas premissas. A primeira implica que a covariância entre o resíduo e o vetor de variáveis explicativas seja igual a zero e essa é uma versão mais fraca da exogeneidade (\ref{eqn:cov}). Por outro lado, a segunda premissa diz que a multiplicação matricial de $\textbf{X}$ e sua transposta tem que ser igual a ordem de $\textbf{X}$ (\ref{eqn:posto}), ou seja, implica independência linear.
+
+```{=tex}
+\label{eqn:cov}
+\begin{equation}
+E[\textbf{X}'\mbfvarepsilon] = \textbf{0}
+\end{equation}
+```
+
+```{=tex}
+\label{eqn:posto}
+\begin{equation}
+E[\textbf{X'X}] = k
+\end{equation}
+```
 
 # ESTIMAÇÃO
 
