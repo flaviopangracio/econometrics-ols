@@ -1605,7 +1605,7 @@ library(sandwich)
 library(lmtest)
 
 # Erros padrões robustos após correção pela matrix de White
-erros_robustos <- coeftest(modelo_dist, vcov=sandwich::vcovHC(modelo_dummies, type="HC0"))
+erros_robustos <- coeftest(modelo_dummies, vcov=sandwich::vcovHC(modelo_dummies, type="HC0"))
 modelo_dummies_robusto <- modelo_dummies
 modelo_dummies_robusto$coefficients <- erros_robustos[,1]
 ```
