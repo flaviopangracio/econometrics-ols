@@ -44,6 +44,7 @@ format:
         mainfont: "Times New Roman"
 ---
 
+
 \pagestyle{fancy} <!-- Show the page number --> \justify
 \onehalfspacing
 
@@ -69,12 +70,14 @@ Nesta perspectiva, para a definição do modelo clássico de regressão linear, 
 
 A primeira hipótese implica que o modelo deve ser linear nos parâmetros estimados. Disso decorre que as variáveis explicativas podem ser não lineares. Essa hipótese basicamente indica que a relação das variáveis independentes com o parâmetro estimado é linear (\ref{eqn:linear}), ou seja, uma variação marginal nas variáveis independentes resultará em uma variação constante na variável explicada.
 
+
 ```{=tex}
 \begin{equation}
 \label{eqn:linear}
 y = x_1 \beta_1 + x_2 \beta_2 + \dots + x_k \beta_k + \varepsilon
 \end{equation}
 ```
+
 
 *Posto Completo*
 
@@ -83,6 +86,7 @@ Essa hipótese é uma condição necessária do MCRL, haja vista que, se não sa
 *Exogeneidade*
 
 Tal condição garante que a média condicional do erro dadas as variáveis explicativas é igual a zero. Também conhecida como exogeneidade estrita, seu significado é de que as variáveis explicativas não possuem relação com o termo de perturbação (\ref{eqn:exo}). Além disso, é importante ressaltar que, como a média condicional do erro é zero, sua média incondicional também é zero, o que é garantido pela lei das expectativas iteradas (\ref{eqn:expectations}). Essa é uma forte implicação que garante que uma estimação pelo MCRL sempre acerta na média. Ademais, o MCRL garante a aleatoriedade dos resíduos, isto é, a média condicional do erro $i$, dado um erro $j$ qualquer é zero.
+
 
 ```{=tex}
 \begin{equation}
@@ -98,9 +102,11 @@ E[\varepsilon_i] = E_{\textbf{X}}[E[\varepsilon | \textbf{X}]] = E_{\textbf{X}}[
 \end{equation}
 ```
 
+
 *Homocedasticidade e não autocorrelação residual*
 
 Essa quarta hipótese define que a variância condicional do erro é constante (\ref{eqn:var}) e que a covariância condicional dos erros é zero (\ref{eqn:cov}). A variância constante é conhecida como homocedasticidade, o que significa que para qualquer ponto da amostra, a variância sempre será a mesma. Quando isso não ocorre, dizemos que a variância é heterocedástica.
+
 
 ```{=tex}
 \begin{equation}
@@ -116,7 +122,9 @@ Cov[\varepsilon_i, \varepsilon_j | \textbf{X}] = 0, \hspace{1cm} \forall i \neq 
 \end{equation}
 ```
 
+
 Já o fato da covariância condicional dor erros ser igual a zero define a não autocorrelação entre os termos de perturbação. Em termos matriciais, temos que a matriz de erros vezes a sua transposta é igual a matriz identidade vezes a variância dos resíduos (\ref{eqn:ee}). Vale ressaltar que isso não implica que as observações não são autocorrelacionadas.
+
 
 ```{=tex}
 \begin{equation}
@@ -137,6 +145,7 @@ E[\varepsilon_n \varepsilon_1 | \textbf{X}] && E[\varepsilon_n \varepsilon_2 | \
 \end{equation}
 ```
 
+
 *Processo Gerador dos dados para a regressão*
 
 A quinta premissa se refere a não aleatoriedade do vetor de variáveis explicativas, em outras palavras, ele é não estocástico. Isso quer dizer que o vetor de variáveis explicativas é gerado exogenamente. No entanto, usualmente isso é de difícil aplicação, haja vista que o vetor $\textbf{X}$ tende a ser aleatório, tal qual o vetor $\textbf{Y}$. Desse modo, uma forma alternativa é assumir $\textbf{X}$ como um vetor aleatório e tratar da distribuição conjunta de $\textbf{X}$ e $\textbf{Y}$. Desse modo, essa premissa firma que $\textbf{X}$ pode ser fixo ou aleatório.
@@ -147,12 +156,14 @@ Implica que os termos de perturbação são normalmente distribuídos, possuindo
 
 Finalizada esta parte, apresentou-se as premissas do MCRL, as quais servem como base para a construção de um modelo econométrico. O objetivo seguinte será descrever métodos de estimação de modelos, dentre eles, o famoso e amplamente utilizado, método de mínimos quadrados ordinários.
 
+
 ```{=tex}
 \begin{equation}
 \label{eqn:normal}
 \varepsilon | \textbf{X} \sim N[\textbf{0}, \sigma^2 \textbf{I}]
 \end{equation}
 ```
+
 
 A figura \ref{fig:linearmodel} representa bem o Modelo Clássico de Regressão Linear, com os pressupostos definidos acima:
 
@@ -161,6 +172,7 @@ A figura \ref{fig:linearmodel} representa bem o Modelo Clássico de Regressão L
 # REGRESSÃO POR MÍNIMOS QUADRADOS
 
 O método de mínimos quadrados ordinários consiste em minimizar a soma do quadrado dos resíduos, a fim de encontrar os parâmetros do modelo. O primeiro passo é distinguir entre as quantidades populacionais não observadas e os parâmetros amostrais. Em outras palavras, existem os parâmetros verdadeiros e os parâmetros calculados no modelo agem como uma estimativa desses parâmetros populacionais, desde que sejam satisfeitas as condições que tornem o MQO aplicável. Em termos matriciais, haja vista que estamos tratando de uma regressão linear múltipla, podemos escrever o modelo da seguinte forma:
+
 
 ```{=tex}
 \begin{equation}
@@ -218,11 +230,13 @@ CPO: \hspace{1cm} \frac{\partial S(\mbfbeta)}{\partial \mbfbeta} = -2\textbf{X'Y
 \end{equation}
 ```
 
+
 Essa estimação nada mais é que as condições de primeira ordem do modelo. Nesse sentido, a partir dos valores estimados após encontrar os parâmetros amostrais, existem algumas relações importantes, sobretudo entre o termo de erro e os valores preditos da variável dependente: i) o MQO garante que a média dos resíduos é zero; ii) como não há covariância amostral entre o termo de erro e as variáveis independentes, não há covariância amostral entre os valores estimados e os resíduos; iii) os pontos médios das variáveis estão sempre sobre a reta de regressão.
 
 Além disso, sob a hipótese de homocedasticidade, tratada anteriormente no MCRL, existe um teorema, conhecido como teorema de Gauss-Markov, o qual garante que os estimadores de mínimos quadrados são os melhores estimadores não viesados da classe dos lineares. Todavia, esse teorema é muito restrito, haja vista as limitações impostas, como homocedasticidade e exogeneidade estrita, haja vista a ausência de viés. Nesse sentido, é mais vantajoso analisar as propriedades assintóticas dos estimadores, que tratam de convergência em probabilidade e flexibilizam mais o modelo estimado.
 
 Conforme Wooldrige (2010), para um estimador ser consistente, são necessárias duas premissas. A primeira implica que a covariância entre o resíduo e o vetor de variáveis explicativas seja igual a zero e essa é uma versão mais fraca da exogeneidade (\ref{eqn:cov}). Por outro lado, a segunda premissa diz que a multiplicação matricial de $\textbf{X}$ e sua transposta tem que ser igual a ordem de $\textbf{X}$ (\ref{eqn:posto}), implicando independência linear.
+
 
 ```{=tex}
 \label{eqn:cov}
@@ -238,11 +252,13 @@ E[\textbf{X'X}] = k
 \end{equation}
 ```
 
+
 *Ajuste do modelo*
 
 Se chamarmos de $\hat{\mbfbeta}$ o vetor de parâmetros estimados por MQO, podemos obter o vetor $\hat{\textbf{Y}}$ de valores estimados de $\textbf{Y}$. Todos esses valores estimados estarão necessariamente sobre a reta de regressão do MQO. A diferença entre $\hat{\textbf{Y}}$ e $\textbf{Y}$ será justamente o vetor de resíduos $\hat{\mbfvarepsilon}$. Ou seja, $\textbf{Y} - \hat{\textbf{Y}} = \hat{\mbfvarepsilon}$. Logo, se pensarmos em cada observação $i$, $\hat{\varepsilon_i}$ é a diferença entre $y_i$ e $\hat{y_i}$. Se $\hat{\varepsilon_i} > 0$, a reta subestima $y_i$; se $\hat{\varepsilon_i} < 0$ a reta superestima $y_i$; se $\hat{\varepsilon_i} = 0$, a reta passa exatamente sobre $y_i$.
 
 Pela propriedade da equação (\ref{eqn:expectations}), temos que a média dos resíduos é zero. De forma equivalente, a média dos valores estimados é a mesma média amostral dos valores observados, $\overline{\hat{y}} = \overline{y}$. Dada essa característica, podemos definir medidas de perturbação em relação à média amostral $\hat{y}$:
+
 
 ```{=tex}
 \label{eqn:sqt}
@@ -265,7 +281,9 @@ SQR = \sum^{n}_{i = 1} \hat{\varepsilon_{i}}^2
 \end{equation}
 ```
 
+
 $SQT$ (Soma dos quadrados totais) mede a dispersão das $i$ observações ($y_i$), tendo a média amostral como centro. $SQE$ (Soma dos quadrados estimados) mede a dispersão das $i$ estimativas de $y$ ($\hat{y_i}$). $SQR$ (Soma dos quadrados dos resídiuos) mede a variação dos erros estimados ($\hat{\varepsilon_i}$). A variação total em $y$ pode ser sempre espressada como a soma da variação explicada e da variação não explicada (ou dos resíduos):
+
 
 ```{=tex}
 \label{eqn:soma}
@@ -274,11 +292,13 @@ SQT = SQE + SQR
 \end{equation}
 ```
 
+
 *Grau de Ajuste*
 
 As definições acima nos ajudarão à definir uma medida de ajuste do modelo, ou seja, dizer quão bem nossas variáveis independentes ($\textbf{X}$) explicam as observações da variável dependente ($\textbf{Y}$).
 
 Se assumirmos que $SQT \neq 0$, podemos definir uma medida conhecida como $R^2$ (coeficiente de determinação), que basicamente é uma proporção entre a variação explicada (SQE) e a variação total (SQT). Em outras palavras, é uma medida que diz quanto da variação total em $y$ foi explicada pelas variáveis $x$.
+
 
 ```{=tex}
 \label{eqn:rquadrado}
@@ -286,6 +306,7 @@ Se assumirmos que $SQT \neq 0$, podemos definir uma medida conhecida como $R^2$ 
 R^2 = \frac{SQE}{SQT} = 1 - \frac{SQR}{SQT}
 \end{equation}
 ```
+
 
 $$R^2 \in [0, 1]$$
 
@@ -389,6 +410,7 @@ $$\textbf{Y} = \textbf{X} \mbfbeta + \textbf{D} \mbfgamma + \mbfvarepsilon$$
 
 Expandindo a equação anterior:
 
+
 ```{=tex}
 \begin{equation}
 \begin{bmatrix}
@@ -434,6 +456,7 @@ y_n
 \end{bmatrix}_{n \times 1}
 \end{equation}
 ```
+
 Sendo $\textbf{D}$ uma matriz formada por zeros (0) e uns (1) que indicam que uma dada observação possui alguma característica ou pertence a um grupo específico. Essa matriz tem dimensão $n \times \theta$, em que $n$ é o tamanho da amostra e $\theta$ o número de dummies. O vetor coluna $\mbfgamma$ são os coeficientes de regressão associados as $\theta$ dummies.
 
 Quando uma dummy recebe valor 1, então o valor de $\gamma$ associado é incorporado na estimação. Caso contrário, a dummy será 0 e não incluirá o valor de $\gamma$.
@@ -587,6 +610,7 @@ que ser usado para estimar a matriz de covariância assintótica de b. Este resu
 Para aplicar as questões tratadas nas últimas seções, vamos estimar um modelo linear por MQO, utilizando a linguagem R e os dados da REGIC 2018 para municípios de Minas Gerais.
 
 Carregando pacotes:
+
 ```{r}
 library(readxl)
 library(dplyr)
@@ -598,7 +622,9 @@ library(ggrepel)
 library(scatterplot3d)
 ```
 
+
 Carregando a base da REGIC 2018 e ajustando as variáveis de interesse:
+
 
 ```{r}
 df_regic <- readxl::read_xlsx(
@@ -723,6 +749,7 @@ cgp_map <- ggplot2::ggplot(municipios) +
 ggsave("exports/cgpmap.pdf", plot = cgp_map, width = 5000, height = 5000, units = "px", dpi = 320)
 ```
 
+
 Foi necessário excluir os registros que tinham alguma variável de interesse NULA (NA). Optou-se por não substituir os *NA* por valores arbitrários, como zero ou qualquer outro valor, pois causaria um grande viés na regressão, visto que se tratam municípios que não tiverem essas variáveis mensuradas.
 
 ## Análise Descritiva
@@ -730,6 +757,7 @@ Foi necessário excluir os registros que tinham alguma variável de interesse NU
 Nesta seção, uma análise descritiva abrangente das variáveis em questão será conduzida, visando fornecer uma compreensão profunda de seus padrões, distribuições e relações. Esta abordagem permite não apenas a caracterização detalhada de cada variável individualmente, mas também a identificação de tendências e padrões globais dentro do conjunto de dados.
 
 A Tabela @tbl-sum-vars contém as principais estatísticas descritivas das variáveis analisadas (PIB per capita, Centralidade da Gestão Pública (CGP) e Coeficiente de Intensidade da Gestão Empresarial (CIGE)) para as 168 observações (municípios) restantes na base:
+
 ```{r, results='asis', echo=FALSE}
 #| label: tbl-sum-vars
 #| tbl-cap: Estatísticas descritivas das variáveis
@@ -755,7 +783,9 @@ stargazer::stargazer(
 )
 ```
 
+
 Abaixo, plotamos os histogramas dessas variáveis:
+
 ```{r, echo=FALSE}
 #| fig-cap: Histograma do PIB per capita dos municípios de Minas Gerais (2018)
 
@@ -828,7 +858,9 @@ ggplot2::ggplot(df_regic, aes(x = cgp)) +
   )
 ```
 
+
 Podemos ver a correlação entre as variáveis por meio de um mapa de calor obtido da matriz de correlação:
+
 ```{r, results='asis'}
 #| label: fig-cor-heatmap
 #| fig-cap: "Mapa de calor da matriz de correlação."
@@ -842,13 +874,17 @@ matrix <- df_regic |>
 matrix |> cor() |> heatmap()
 ```
 
+
 Outra medida importante é a de covariância entre as variáveis, descrita na matriz de covariância abaixo (variância na diagonal principal):
+
 
 ```{r}
 matrix |> cov() |> round(2)
 ```
 
+
 Abaixo plotamos os *boxplots* das variáveis utilizadas:
+
 ```{r}
 #| label: fig-box-cgp
 #| fig-cap: "Boxplot da Centralidade da Gestão Pública (CGP) dos municípios de Minas Gerais (2018)"
@@ -867,6 +903,7 @@ boxplot(df_regic$cige)
 boxplot(df_regic$cige)
 ```
 
+
 A visualização geográfica das variáveis do modelo (para o caso de municípios) é essencial para compreender, com clareza, onde os processos estão acontecendo:
 
 \fig{PIB per capita dos municípios de Minas Gerais - REGIC 2018}{fig:pibpc}{exports/pibmap.pdf}{Elaboração própria.}
@@ -876,6 +913,7 @@ A visualização geográfica das variáveis do modelo (para o caso de município
 \fig{CGP dos municípios de Minas Gerais - REGIC 2018}{fig:cgp}{exports/cgpmap.pdf}{Elaboração própria.}
 
 Por fim, podemos plotar alguns gráficos de dispersão para esboçar a relação entre as variáveis do modelo:
+
 
 ```{r, echo=FALSE, message=FALSE, result='asis'}
 #| label: fig-cige-scatter
@@ -949,9 +987,11 @@ ggplot2::ggplot(municipios,  aes(x = log(cgp), y = log(pib_pc), label = name_mun
   )
 ```
 
+
 ## Análise de Regressão
 
 Com as mesmas operações definidas na seção sobre Regressão Por Mínimos Quadrados, vamos estimar um modelo linear que tenta explicar o $ln(PIBpc)$ (logaritmo natural do PIB per capita) de municípios mineiros, com variáveis que medem intensidade de gestão empresarial (CIGE) e nível de centralidade da gestão pública (CGP).
+
 
 ```{r}
 # Regressão simples
@@ -967,7 +1007,9 @@ print(paste0("Intercepto: ", round(b0, 2)))
 print(paste0("Coeficiente estimado: ", round(b1, 2)))
 ```
 
+
 Com esses coeficientes já é possível traçar uma reta de regressão no gráfico:
+
 
 ```{r, echo=FALSE}
 ggplot2::ggplot(municipios,  aes(x = log(cige), y = log(pib_pc), label = name_muni)) +
@@ -997,7 +1039,9 @@ ggplot2::ggplot(municipios,  aes(x = log(cige), y = log(pib_pc), label = name_mu
   )
 ```
 
+
 Para verificar o ajuste do modelo, podemos calcular o $R^2$, dado que $R^2 = Var(\hat{y})/Var(y)$:
+
 
 ```{r}
 # Cálculo do R-quadrado
@@ -1008,11 +1052,13 @@ r2 <- var(y.hat)/var(y)
 r2
 ```
 
+
 Esse resultado indica que cerca de $16,10\%$ da variação do log do PIB per capita dos municípios da amostra é explicado pelo log do Coeficiente de Interação da Gestão Empresarial (CIGE) desses municípios.
 
 ## Análise de Regressão Múltipla
 
 Vamos acrescentar mais uma variável no modelo anterior e estimar novamente os parâmetros por meio de álgebra matricial:
+
 
 ```{r}
 # Número de observações da amostra
@@ -1048,7 +1094,9 @@ varbetahat
 erropadraobeta
 ```
 
+
 Com apenas 2 variáveis independentes ainda é possível ver graficamente essa regressão, e agora, ao invés de uma reta de regressão, temos um plano de regressão:
+
 
 ```{r, echo=FALSE, warning=FALSE}
 mqo <- lm(log(pib_pc) ~ log(cige) + log(cgp), df_regic)
@@ -1066,12 +1114,15 @@ y.hat <- X %*% bhat
 grafico$plane3d(mqo, col = "red", alpha = 0.5, draw_polygon = T, draw_lines = T)
 ```
 
+
 Como fizemos para a regressão simples, podemos calcular o ajuste $R^2$ para o modelo de regressão múltipla:
+
 
 ```{r}
 r2 <- var(y.hat)/var(y)
 r2
 ```
+
 
 Esse resultado indica que cerca de $21,55\%$ da variação do log do PIB per capita dos
 municípios da amostra é explicada pela combinação linear entre o log do Coeficiente de Interação da Gestão Empresarial(CIGE) e o log do nível de Centralidade da Gestão Pública (CGP) desses municípios.
@@ -1083,6 +1134,7 @@ Optamos por substituir as variáveis utilizadas anteriormente para aumentar o ta
 Para melhorar a análise sobre a presença de bancos nos munípios, adicionamos variáveis de uma base geolocalizada da ESTBAN para completar os dados faltantes na REGIC 2018.
 
 Estimamos 2 modelos, incorporando diferentes formas funcionais. Ambos linearizam as variáveis contínuas com características exponenciais por meio de logaritmo. O primeiro, utiliza dummies da presença de bancos públicos e privados no munícipio, dando relevância à presença de bancos na estimação do PIB per capita. O segundo, utiliza variáveis que mensuram a distância do centróide de um munícipio até o centróide do município com agência bancária (separando por público e privado) mais próximo (municípios com agências bancárias recebem valor 0).
+
 
 
 ```{r}
@@ -1255,7 +1307,9 @@ modelo_dummies <- lm(log(pib_pc) ~ log_ia + log(va_adm_publica) + banco_publico 
 modelo_dist <- lm(log(pib_pc) ~ log_ia + log(va_adm_publica) + dist2.min.banco.publico + dist2.min.banco.privado, municipios)
 ```
 
+
 A @fig-va mostra como o valor adicionado da Administração Pública está correlacionada com o PIB per capita, controlando pelos tipos de bancos presentes nos munícipios. As diferentes linhas de regressão mostram como a presença de um banco público eleva o nível de renda per capita dos municípios. O efeito dos bancos privados não foi significativo.
+
 
 ```{r, echo=FALSE, message=FALSE, result='asis'}
 #| label: fig-va
@@ -1306,7 +1360,9 @@ ggplot2::ggplot(municipios,  aes(x = log(va_adm_publica), y = log(pib_pc), label
   )
 ```
 
+
 A @fig-ia mostra que o Índice de Atratividade não está tão relacionado com PIB per capita. Apesar de ter um efeito estatísticamente diferente de zero, nem conseguimos ver as retas de regressão no gráfico, ou seja, nesse modelo em específico, não há tanto ajuste para essa variável. Os municípios com população pequena em Minas Gerais e que não são tão atrativos comercialmente, podem estar sobrevalorizando o PIB per capita e distorcendo a análise. A @fig-ia-pib mostra que o Índice de Atratividade está muito mais correlacionado ao tamanho do PIB, das grandes cidades.
+
 
 ```{r, echo=FALSE, message=FALSE, result='asis'}
 #| label: fig-ia
@@ -1408,7 +1464,9 @@ ggplot2::ggplot(municipios,  aes(x = log_ia, y = log(pib), label = name_muni, co
   )
 ```
 
+
 A @fig-dist-pub mostra que quanto mais distantes os municípios estão de um banco público, menos renda per capita eles detêm, indicando menor desenvolvimento à medida que se dificulta o acesso às agências, dado que há maiores custos de deslocamento e menor interação entre agentes mais distantes no espaço.
+
 
 ```{r, echo=FALSE, message=FALSE, result='asis'}
 #| label: fig-dist-pub
@@ -1450,7 +1508,9 @@ ggplot2::ggplot(municipios,  aes(x = dist2.min.banco.publico, y = log(pib_pc), l
   )
 ```
 
+
 O mesmo acontece para a distância que os municípios estão de bancos privados (@fig-dist-priv), mas numa intensidade menor. No modelo com ambas as variáveis, apenas a distância para o banco público foi significativa na estimação.
+
 
 ```{r, echo=FALSE, message=FALSE, result='asis'}
 #| label: fig-dist-priv
@@ -1492,7 +1552,9 @@ ggplot2::ggplot(municipios,  aes(x = dist2.min.banco.privado, y = log(pib_pc), l
   )
 ```
 
+
 A @tbl-model mostra o resultado da estimação e serve de comparativo entre os modelos com dummy bancária e o que incorpora o quadrado da distância.
+
 
 ```{r echo=FALSE, results='asis', warning=FALSE}
 #| label: tbl-model
@@ -1514,9 +1576,11 @@ stargazer::stargazer(
 )
 ```
 
+
 ## Testes
 
 Para testar multicolinearidade, podemos utilizar o fator de inflacionamento da variância (VIF), definido na seção sobre multicolinearidade:
+
 
 ```{r}
 library(car)
@@ -1530,9 +1594,11 @@ car::vif(modelo_dummies)
 car::vif(modelo_dist)
 ```
 
+
 Como os valores do VIF são baixos, podemos dizer que não há multicolinearidade prejudicial em nenhum dos modelos estimados. Não sendo necessário realizar ajustes nesse sentido.
 
 No que tange a heterocedasticidade, podemos tentar visualizar graficamente a interação entre os resíduos e os valores estimados:
+
 
 ```{r, echo=FALSE, message=FALSE, result='asis'}
 #| label: fig-residuos-dummies
@@ -1584,7 +1650,9 @@ ggplot2::ggplot() +
   )
 ```
 
+
 A princípio, graficamente, não há correlação entre os resíduos e os valores estimados, indicando que não há heterocedasticidade nos modelos estimados. Apesar disso, faremos o teste de Breusch-Pagan para verificar se os erros são normalmente distribuídos. A hipótese nula é de que a variância dos resíduos é igual à $\sigma^2$. Rejeitaremos a hipótese nula, caso $p-value < 0,05$:
+
 
 ```{r}
 library(lmtest)
@@ -1596,9 +1664,11 @@ lmtest::bptest(modelo_dummies)
 lmtest::bptest(modelo_dummies)
 ```
 
+
 Como em ambos os modelos, $p-value < 0,05$ rejeitamos a hipótese nula e tomamos os modelos como heterocedásticos.
 
 Na presença de heterocedasticidade, os erros padrões não são confiáveis, e portanto devemos fazer a correção de White para que incluir erros robustos aos modelos.
+
 
 ```{r}
 library(sandwich)
@@ -1617,7 +1687,9 @@ modelo_dist_robusto <- modelo_dist
 modelo_dist_robusto$coefficients <- erros_robustos[,1]
 ```
 
+
 A @tbl-model-robust mostra a diferença dos coeficientes após as correções de heterocedasticidade nos modelos.
+
 
 ```{r echo=FALSE, results='asis', warning=FALSE}
 #| label: tbl-model-robust
@@ -1641,6 +1713,7 @@ stargazer::stargazer(
 )
 ```
 
+
 \newpage
 
 # REFERÊNCIAS
@@ -1649,3 +1722,4 @@ stargazer::stargazer(
 
 ::: {#refs}
 :::
+
