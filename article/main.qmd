@@ -20,6 +20,14 @@ author:
       affiliations:
         - name: "Cedeplar - UFMG"
           url: https://cedeplar.ufmg.br
+
+    - name: "Rayner Filomeno"
+      orcid:
+      email: "rayner.filomeno@gmail.com"
+      affiliations:
+        - name: "Cedeplar - UFMG"
+          url: https://cedeplar.ufmg.br
+
 bibliography: referencies/ref.bib
 csl: cite_styles/abnt.csl
 highlight-style: atom-one
@@ -291,7 +299,7 @@ $$R^2 \in [0, 1]$$
 
 Como $SQE \leq SQT$, $R^2$ sempre estará entre $0$ e $1$. Graficamente falando, quanto mais próximo de $1$, mais próximas as observações estarão da reta de regressão.
 
-# Tópicos adicionais
+# FORMAS FUNCIONAIS, INFERÊNCIA E QUEBRA DE PRESSUPOSTOS
 
 *Multicolinearidade*
 
@@ -1209,7 +1217,7 @@ resultados <- data.frame(city = character(nrow(dist2)), dist2.min.banco.publico 
 
 for(i in 1:nrow(dist2)){
   city <- names(dist2[, 1])[i]
-  
+
   if (city %in% as.character(municipios_banco_publico$code_muni)){
     dist.pub <- 0
   } else {
@@ -1222,7 +1230,7 @@ for(i in 1:nrow(dist2)){
       }
     }
   }
-  
+
   if (city %in% as.character(municipios_banco_privado$code_muni)){
     dist.priv <- 0
   } else {
@@ -1235,7 +1243,7 @@ for(i in 1:nrow(dist2)){
       }
     }
   }
-  
+
   resultados[i, 1] <- city
   resultados[i, 2] <- dist.pub
   resultados[i, 3] <- dist.priv
@@ -1255,7 +1263,7 @@ modelo_dummies <- lm(log(pib_pc) ~ log_ia + log(va_adm_publica) + banco_publico 
 modelo_dist <- lm(log(pib_pc) ~ log_ia + log(va_adm_publica) + dist2.min.banco.publico + dist2.min.banco.privado, municipios)
 ```
 
-A @fig-va mostra como o valor adicionado da Administração Pública está correlacionada com o PIB per capita, controlando pelos tipos de bancos presentes nos munícipios. As diferentes linhas de regressão mostram como a presença de um banco público eleva o nível de renda per capita dos municípios. O efeito dos bancos privados não foi significativo.
+A @fig-va mostra como o valor adicionado da Administração Pública está correlacionada com o PIB per capita, controlando pelos tipos de bancos presentes nos munícipios. As diferentes linhas de regressão mostram como a presença de um banco público eleva o nível de renda per capita dos municípios. O efeito dos bancos privados não foi significativo.Tal resultado pode estar ligado a fatores institucionais, os quais criam uma dependência de trajetória no tempo. A opção de estabelecer um banco público em determinado munícipio em um certo período de tempo fez com que se produzisse todo um arranjo institucional que possibilita a elevação dos rendimentos e, dado esse arranjo, ocorre uma dinamização em torno do mesmo, de modo que as características tendem a se perpetuar, como explica North (1990).
 
 ```{r, echo=FALSE, message=FALSE, result='asis'}
 #| label: fig-va
@@ -1408,7 +1416,7 @@ ggplot2::ggplot(municipios,  aes(x = log_ia, y = log(pib), label = name_muni, co
   )
 ```
 
-A @fig-dist-pub mostra que quanto mais distantes os municípios estão de um banco público, menos renda per capita eles detêm, indicando menor desenvolvimento à medida que se dificulta o acesso às agências, dado que há maiores custos de deslocamento e menor interação entre agentes mais distantes no espaço.
+A @fig-dist-pub mostra que quanto mais distantes os municípios estão de um banco público, menos renda per capita eles detêm, indicando menor desenvolvimento à medida que se dificulta o acesso às agências, dado que há maiores custos de deslocamento e menor interação entre agentes mais distantes no espaço. Tal resultado é amplamente discutido no âmbito da literatura regional, reforçando a Teoria do Lugar Central, proposta por Christaller (1966). Supondo que essas regiões que possuem bancos públicos exerçam uma espécie de centralidade, elas geram economias de localização e urbanização, as quais se traduzem em spillovers para regiões próximas, beneficiando seu crescimento econômico.
 
 ```{r, echo=FALSE, message=FALSE, result='asis'}
 #| label: fig-dist-pub
@@ -1450,7 +1458,7 @@ ggplot2::ggplot(municipios,  aes(x = dist2.min.banco.publico, y = log(pib_pc), l
   )
 ```
 
-O mesmo acontece para a distância que os municípios estão de bancos privados (@fig-dist-priv), mas numa intensidade menor. No modelo com ambas as variáveis, apenas a distância para o banco público foi significativa na estimação.
+O mesmo acontece para a distância que os municípios estão de bancos privados (@fig-dist-priv), mas numa intensidade menor. No modelo com ambas as variáveis, apenas a distância para o banco público foi significativa na estimação. Uma hipótese para tal resultado é a ampla dispersão de bancos privados nos munícipios, mesmo aqueles de menor tamanho, o que não ocorre com os bancos públicos.
 
 ```{r, echo=FALSE, message=FALSE, result='asis'}
 #| label: fig-dist-priv
@@ -1530,7 +1538,7 @@ car::vif(modelo_dummies)
 car::vif(modelo_dist)
 ```
 
-Como os valores do VIF são baixos, podemos dizer que não há multicolinearidade prejudicial em nenhum dos modelos estimados. Não sendo necessário realizar ajustes nesse sentido.
+Como os valores do VIF são menores do que 4, podemos dizer que não há multicolinearidade prejudicial em nenhum dos modelos estimados. Não sendo necessário realizar ajustes nesse sentido.
 
 No que tange a heterocedasticidade, podemos tentar visualizar graficamente a interação entre os resíduos e os valores estimados:
 
@@ -1548,6 +1556,7 @@ ggplot2::ggplot() +
     colours = palette1,
     name = "û²"
   ) +
+  ggplot2::ylim(-2, 2) +
   ggplot2::labs(
     x = "PIB per capita estimado",
     y = "Resíduos",
@@ -1573,6 +1582,7 @@ ggplot2::ggplot() +
     colours = palette1,
     name = "û²"
   ) +
+  ggplot2::ylim(-2, 2) +
   ggplot2::labs(
     x = "PIB per capita estimado",
     y = "Resíduos",
@@ -1584,7 +1594,7 @@ ggplot2::ggplot() +
   )
 ```
 
-A princípio, graficamente, não há correlação entre os resíduos e os valores estimados, indicando que não há heterocedasticidade nos modelos estimados. Apesar disso, faremos o teste de Breusch-Pagan para verificar se os erros são normalmente distribuídos. A hipótese nula é de que a variância dos resíduos é igual à $\sigma^2$. Rejeitaremos a hipótese nula, caso $p-value < 0,05$:
+A princípio, graficamente, não há correlação entre os resíduos e os valores estimados, indicando que, possivelmente, não há heterocedasticidade nos modelos estimados. Entretanto, uma análise gráfica não é o melhor método para detectar este problema e, portanto, faremos o teste de Breusch-Pagan para verificar se os erros são normalmente distribuídos. A hipótese nula é de que a variância dos resíduos é igual à $\sigma^2$. Rejeitaremos a hipótese nula, caso $p-value < 0,05$. Em outras palavras, se o $p-value$ é menor que o nível de significância de 5%, a chance de estarmos cometendo o erro do tipo 1 é muito baixa, o que nos leva a aceitar a hipótese alternativa, i.e., de que os erros são heterocedásticos. O teste está realizado abaixo:
 
 ```{r}
 library(lmtest)
@@ -1598,23 +1608,76 @@ lmtest::bptest(modelo_dummies)
 
 Como em ambos os modelos, $p-value < 0,05$ rejeitamos a hipótese nula e tomamos os modelos como heterocedásticos.
 
-Na presença de heterocedasticidade, os erros padrões não são confiáveis, e portanto devemos fazer a correção de White para que incluir erros robustos aos modelos.
+Na presença de heterocedasticidade, os erros padrões não são confiáveis, e portanto devemos fazer a correção pela matriz de White para que incluir erros robustos aos modelos. A @fig-residuos-robustos-dummies e a @fig-residuos-robustos-dist mostram os erros após o ajuste.
 
 ```{r}
 library(sandwich)
-library(lmtest)
 
 # Erros padrões robustos após correção pela matrix de White
-erros_robustos <- coeftest(modelo_dummies, vcov=sandwich::vcovHC(modelo_dummies, type="HC0"))
 modelo_dummies_robusto <- modelo_dummies
-modelo_dummies_robusto$coefficients <- erros_robustos[,1]
+matriz_white <- as.matrix.data.frame(sandwich::vcovHC(modelo_dummies, type="HC0"))
+erros_robustos <- sqrt(diag(matriz_white)) * modelo_dummies$residuals
+modelo_dummies_robusto$residuals <- erros_robustos
+```
+
+```{r, echo=FALSE, message=FALSE, result='asis'}
+#| label: fig-residuos-robustos-dummies
+#| fig-cap: "PIB per capita estimado x Resíduos Robustos (Modelo com dummies bancárias)"
+
+
+model <- lm(modelo_dummies_robusto$residuals ~ modelo_dummies_robusto$fitted.values)
+
+ggplot2::ggplot() +
+  ggplot2::geom_point(mapping = aes(x = modelo_dummies_robusto$fitted.values, y = modelo_dummies_robusto$residuals, colour = modelo_dummies_robusto$residuals**2)) +
+  ggplot2::geom_abline(intercept = model$coefficients[1], slope = model$coefficients[2], color = "red") +
+  ggplot2::scale_color_gradientn(
+    colours = palette1,
+    name = "û²"
+  ) +
+  ggplot2::ylim(-2, 2) +
+  ggplot2::labs(
+    x = "PIB per capita estimado",
+    y = "Resíduos",
+  ) +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(
+    text = ggplot2::element_text(size = 10, face = "bold"),
+    legend.text = ggplot2::element_text(size = 10, face = "plain")
+  )
 ```
 
 ```{r}
 # Erros padrões robustos após correção pela matrix de White
-erros_robustos <- coeftest(modelo_dist, vcov=sandwich::vcovHC(modelo_dist, type="HC0"))
 modelo_dist_robusto <- modelo_dist
-modelo_dist_robusto$coefficients <- erros_robustos[,1]
+matriz_white <- as.matrix.data.frame(sandwich::vcovHC(modelo_dist, type="HC0"))
+erros_robustos <- sqrt(diag(matriz_white)) * modelo_dist$residuals
+modelo_dist_robusto$residuals <- erros_robustos
+```
+
+```{r, echo=FALSE, message=FALSE, result='asis'}
+#| label: fig-residuos-robustos-dist
+#| fig-cap: "PIB per capita estimado x Resíduos Robustos (Modelo com distância)"
+
+
+model <- lm(modelo_dist_robusto$residuals ~ modelo_dist_robusto$fitted.values)
+
+ggplot2::ggplot() +
+  ggplot2::geom_point(mapping = aes(x = modelo_dist_robusto$fitted.values, y = modelo_dist_robusto$residuals, colour = modelo_dist_robusto$residuals**2)) +
+  ggplot2::geom_abline(intercept = model$coefficients[1], slope = model$coefficients[2], color = "red") +
+  ggplot2::scale_color_gradientn(
+    colours = palette1,
+    name = "û²"
+  ) +
+  ggplot2::ylim(-2, 2) +
+  ggplot2::labs(
+    x = "PIB per capita estimado",
+    y = "Resíduos",
+  ) +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(
+    text = ggplot2::element_text(size = 10, face = "bold"),
+    legend.text = ggplot2::element_text(size = 10, face = "plain")
+  )
 ```
 
 A @tbl-model-robust mostra a diferença dos coeficientes após as correções de heterocedasticidade nos modelos.
@@ -1640,6 +1703,14 @@ stargazer::stargazer(
   no.space = TRUE
 )
 ```
+
+Observa-se, pela tabela 3, que em ambos os modelos o logarítimo do Indíce de Atração Financeira é significativos, no mínimo, ao nível de 5%. Já o logarítimo do Valor Adicionado da Admnistração Pública é, tmabém, significativo ao nível de 1%. Isso implica que essas variáveis estão influenciando positivamente o logarítimo do PIB per capita. Ademais, todos os modelos possuem uma constante significativa.
+
+No modelo de dummies, por sua vez, temos que a presença de bancos públicos exerce uma influência positiva no PIB per capita do município, ao passo que a presença de bancos privados mostrou-se não significativa. Dessa forma, pode-se arguir que ter um banco público em um município promove uma elevação da renda deste mesmo, em comparação com os demais, onde não há presença do mesmo.
+
+Por sua vez, o modelo com distâncias inversas aos quadrado, o qual visa captar centralidade obteve resultados que, de certa forma, corroboram os resultados encontrados no modelo com dummies. Isto porque só se mostraram significativos os coeficientes da distância inversa ao quadrado dos bancos públicos. Nesse sentido, quanto mais distante está um município de um banco público, maior tende a ser o efeito negativo em seu PIB per capita.
+
+Dessa forma, após a análise dos modelos, conclui-se que os bancos públicos exercem uma importante influência no PIB per capita municipal, de modo que, além disso, fatores aglomerativos também parecem pesar nessa variável, haja vista que há indícios de centralidade de regiões que possuem bancos públicos em relação aos seus vizinhos, que não possuem. Exarceba-se, portanto, a influência das atividades financeiras para a elevação da renda dos munícipes mineiros.
 
 \newpage
 
