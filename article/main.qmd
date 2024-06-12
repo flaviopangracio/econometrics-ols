@@ -590,6 +590,137 @@ $$
 
 que ser usado para estimar a matriz de covariância assintótica de b. Este resultado implica que, sem realmente especificar o tipo de heterocedasticidade, ainda podemos fazer inferências apropriadas com base no estimador de mínimos quadrados. Esta implicação é útil se não tivermos certeza da natureza da heterocedasticidade.
 
+# ENDOGEINEIDADE, VARIÁVEIS INSTRUMENTAIS E SISTEMAS DE EQUAÇÕES
+
+*Causas da endogeneidade e métodos de contorno*
+
+A classificação dentro de um modelo entre variáveis exógenas e endógenas é muitas vezes controversa. A endogeneidade ocorre quando as variáveis independentes estão correlacionadas com os termos de erro do modelo de regressão. Isso gera problemas que podem ser graves, uma vez que, um “choque” influencia tanto a variável explicada quanto a variável explicativa. Desse modo, em um modelo que sofre deste problema, os estimadores não seriam apenas viesados como, também, inconsistentes.
+
+Nesse sentido, existem vários motivos que podem causar a endogeneidade como: variáveis omitidas, equações simultâneas, má especificação de modelos e etc. Quando trata-se de variável omitida, desde que seja relevante, seus efeitos irão estar contidos no termo de perturbação e, caso essa variável seja correlacionada com a variável explicativa, haverá endogeneidade e, logo, viés e inconsistência das estimativas. Outro caso clássico é o caso de equações simultâneas, onde há um sistema de equações que relacionam variáveis. Na economia esse problema é muito comum, haja vista a necessidade de equilíbrio, que envolve mais de uma equação. O multiplicador Keynesiano é um exemplo, uma vez que a variável de consumo é endógena. Outro exemplo frequente é o da igualdade entre equações de oferta e demanda, nas quais o preço sempre é endógeno. Por fim, também pode-se haver problemas empíricos com a escolha de uma variável explicativa, a qual pode não ser eficaz e, desse modo, estar correlacionada com uma variável que de fato seria e, portanto, está introduzida no distúrbio da equação.
+
+Dessa forma, nota-se que há várias razões que podem causar problemas de endogeneidade em um modelo e são necessários métodos que corrijam esses problemas, haja vista as imprecisões que são causadas nas estimativas. Obviamente, esses métodos já existem e são capazes de contornar este transtorno. Estimação por variáveis instrumentais, mínimos quadrados em dois estágios e pelo método de momentos podem solucionar a endogeneidade e, com isso, fornecer estimativas robustas. Neste trabalho, no entanto, focaremos nos métodos de estimação por variáveis instrumentais e por mínimos quadrados em dois estágios (MQ2E). 
+
+*Variáveis instrumentais*
+
+As variáveis instrumentais (VI) são utilizadas para resolver problemas de endogeneidade que surgem quando uma ou mais variáveis explicativas estão correlacionadas com o termo de erro no modelo de regressão. Isso viola a premissa básica da regressão linear clássica, onde as variáveis explicativas devem ser exógenas, ou seja, não correlacionadas com o termo de erro. O objetivo aqui é discutir como os métodos de variáveis instrumentais (VI) são utilizados para contornar os problemas de endogeneidade, permitindo a obtenção de estimadores consistentes para os parâmetros de interesse em um modelo de regressão, bem como isso é feito.
+
+As variáveis instrumentais podem ser utilizadas para: i) lidar com endogeneidade quando há correlação entre as variáveis explicativas e o erro. Isso ocorre frequentemente devido ao viés de variável omitida ou erros nas variáveis, o que torna os estimadores obtidos por métodos tradicionais inconsistentes. As VI ajudam a obter estimativas consistentes ao fornecer uma fonte exógena de variação em que não está correlacionada com o erro, resolvendo esses problemas. Em termos algébricos, sempre que  $Cov(x,u) \neq 0$; ii) resolver os problemas de variáveis omitidas ao permitir isolar a variação exógena de que não é contaminada pelo termo de erro, eliminando o viés que surge quando uma variável relevante é omitida da regressão; iii) corrigir a inconsistência introduzida pelos erros de medição nas variáveis explicativas, substituindo a variável endógena medida com erro por uma previsão baseada nos instrumentos exógenos; iv) comparação com variáveis proxy, pois embora essas variáveis possam ser usadas quando não há boas VI disponíveis, elas podem estar correlacionadas com o termo de erro e, portanto, ainda levar a estimativas viesadas. As VI são preferíveis porque, quando adequadamente selecionadas, satisfazem as condições de relevância e exogeneidade, resultando em estimadores mais robustos.
+
+Seja o modelo de regressão simples em sua forma mais geral:
+
+$$y = \beta_0 + \beta_1 x_1 + u$$
+I) O instrumento $z$ deve ser exógeno. Isto implica que $Cov(z,u) = 0$
+
+II) O instrumento $z$ deve estar correlacionado com a variável endógena $x_1$, ou seja, $Cov(z, x) \neq 0$.
+
+De modo mais claro, a variável instrumental deve ser: i) exógena, ou seja, não deve estar correlacionada com o termo de erro do modelo de regressão. Essa condição garante que a VI não carrega a influência de variáveis não observadas que afetam a variável dependente e que podem introduzir viés nas estimativas dos parâmetros: ii) relevante, isto é, a VI deve estar correlacionada com a variável endógena, o que significa que ela deve influenciar a variável explicativa de interesse. A relevância garante que a VI é um bom indicador da variável endógena, permitindo que sua variação seja usada para isolar a variação exógena.
+
+Dessa forma, essas duas condições são essenciais para que a VI seja usada para obter estimativas consistentes dos coeficientes dos parâmetros do modelo de regressão, mesmo na presença de endogeneidade.
+
+As Variáveis Instrumentais podem ser utilizadas tanto em modelos de regressão simples quanto em modelos de regressão múltipla. Em um modelo de regressão simples, o objetivo é estimar a relação entre uma variável dependente $y$ e uma variável explicativa $x$. Por outro lado, enquanto a abordagem de VI em um modelo de regressão simples envolve um único instrumento para uma única variável endógena, a regressão múltipla frequentemente lida com múltiplas variáveis explicativas, algumas das quais podem ser endógenas. Portanto, é necessário um conjunto mais robusto de instrumentos.
+
+Embora a VI seja consistente quando $z$ e $u$ são não correlacionados, e $z$ e $x$ tem qualquer correlação, positiva ou negativa, as estimativas de VI podem ter grandes erros-padrão, especialmente se $z$ e $x$ forem apenas fracamente correlacionados. A fraca correlação entre $z$ e $x$ pode ter consequências ainda mais sérias, o estimador VI pode ter grande viés assintótico mesmo se $z$ e $u$ forem só moderadamente correlacionados. Ou seja, mesmo que tenhamos um instrumento válido teoricamente, empiricamente ele pode se revelar um instrumento ruim que pode gerar um viés assintótico ainda maior que o de MQO sob a condição de endogeneidade. Nesse caso, deve-se comparar qual método é mais efetivo e convenciona-se que se escolhe o método de VI caso a razão da correlação entre o instrumento e o termo de erro dividida pela correlação do instrumento com a variável endógena seja menor que a correlação da variável endógena com o erro.
+
+*O Método dos Mínimos Quadrados em Dois Estágios (MQ2E)*
+
+Como visto anteriormente, o método de VI utiliza de um único instrumento para controlar a endogeneidade em um modelo. No entanto, pode ser que hajam múltiplos instrumentos e, neste caso, recorremos ao MQ2E. Este método, em síntese, consiste em instrumentalizar as variáveis endógenas no chamado primeiro estágio e, posteriormente, regredir o modelo por MQO no segundo estágio.
+
+A questão que distingue o método a qual se deve recorrer é a identificação da equação. Se ela é, por exemplo, superidentificada, isto é, quando há mais instrumentos do que variáveis endógenas, o MQ2E torna-se mais prático. Isto porque, estimando através de VI, seria possível obter diferentes estimadores possíveis, enquanto o MQ2E fornece exatamente um.
+
+A identificação de uma equação é obtida pela condição de ordem e pela condição de posto. A condição de ordem diz que o número de variáveis ​​exógenas excluídas da equação deve ser pelo menos tão grande quanto o número de variáveis ​​endógenas incluídas na equação j. Essa condição é necessária, porém não suficiente. Já a condição do posto é necessária e suficiente e define que a matriz das variáveis explicativas escalonada deve ter o mesmo posto da matriz original, em outras palavras, essa matriz deve ser linearmente independente. Nesse sentido, uma equação é: i) superidentificada quando o número de instrumentos é maior que o número de variáveis endógenas; ii) exatamente identificada quando os instrumentos são da mesma magnitude das variáveis endógenas; iii) não identificada quando há mais variáveis endógenas que instrumentos.
+
+Um problema importante que o MQ2E apresenta em relação ao MQO diz respeito a multicolinearidade prejudicial. Essencialmente, a variância do MQ2E tende a ser maior que a variância do MQO. Em primeiro lugar, porque a variável estimada tende a variar menos que a variável endógena e como a variação dessas variáveis estão inversamente relacionadas com a variância do estimador, isso significa uma variância maior. Além disso, como a variável estimada no primeiro estágio é uma combinação linear das variáveis exógenas, a correlação da estimativa com essas variáveis explicativas tende a ser, muitas vezes, maior, causando o problema da multicolinearidade prejudicial.
+
+Outra questão que não pode ser negligenciada é a aplicação do teste F em modelos estimados por MQ2E. Isso ocorre porque o coeficiente de determinação R² pode ser negativo, de modo que a estatística F também o seja, prejudicando a análise dos resultados.
+
+Desse modo, é notável que, apesar de ser consistente, o MQ2E possui suas limitações e, na ausência de endogeneidade, ele é menos eficiente que o MQO, além de poder trazer problemas em análises de inferências. Para tanto, testes de endogeneidade são fundamentais para verificar qual o estimador mais adequado.
+
+Como dito anteriormente, a estimativa de Mínimos Quadrados em Dois Estágios é menos eficiente que Mínimos Quadrados Ordinários quando as variáveis explicativas são exógenas. Como observado, as estimativas MQ2E podem apresentar erros-padrão, que são a raiz da variância estimada, consideravelmente grandes. Portanto, um teste útil para verificar se há endogeneidade em um modelo é o teste de Hausman.
+
+A intuição deste teste é bem simples: basicamente, deve-se encontrar a forma reduzida da variável em análise e, posteriormente, estimar os parâmetros por MQO, obtendo os resíduos dessa estimação. Logo após, deve-se estimar os parâmetros da equação estrutural de interesse incluindo os resíduos da estimação da equação reduzida e verificar se o parâmetro associado a este resíduo é significativo. Caso seja, a variável em análise é endógena e, portanto, o MQ2E é mais adequado.
+
+*Modelo SUR*
+
+O modelo SUR (*Seemingly Unrelated Model* ou Modelo aparentemente não relaciado) é um modelo composto por $M$ equações e $T$ observações e recebe esse nome pela possível correlação entre os resíduos das diferentes equações:
+
+$$
+\begin{bmatrix}
+\textbf{y}_1 \\
+\textbf{y}_2 \\
+\vdots \\
+\textbf{y}_M
+\end{bmatrix}_{MT \times 1}
+=
+\begin{bmatrix}
+\textbf{X}_1 && \textbf{0} && \textbf{0} && \textbf{0} \\
+\textbf{0} && \textbf{X}_{2} && \textbf{0} && \textbf{0} \\
+\vdots && \vdots && \ddots && \vdots \\
+\textbf{0} && \textbf{0} && \textbf{0} && \textbf{X}_{M}
+\end{bmatrix}_{MT \times MT}
+\begin{bmatrix}
+\mbfbeta_1 \\
+\mbfbeta_2 \\
+\vdots \\
+\mbfbeta_M
+\end{bmatrix}_{MT \times 1}
++
+\begin{bmatrix}
+\mbfvarepsilon_1 \\
+\mbfvarepsilon_2 \\
+\vdots \\
+\mbfvarepsilon_M
+\end{bmatrix}_{MT \times 1}
+= \textbf{X} \mbfbeta + \mbfvarepsilon
+$$
+
+Note que na equação acima temos matrizes dentro de matrizes, ou seja, cada $\textbf{y}_i$ com $i \in \{1, 2, ..., M\}$ é uma matriz coluna da variável explicada com dimensão $T \times 1$, sendo $T$ o tamanho da amostra. Logo, $\mbfvarepsilon$ também é um vetor coluna com dimensão $MT \times 1$, composto por $M$ vetores de dimensão $T \times 1$.
+
+Os modelos SUR são utilizados para analisar variáveis inter-relacionadas, como inflação, taxa de juros e crescimento econômico. A correlação entre os erros das equações pode capturar choques macroeconômicos comuns. Além disso, quando os dados envolvem múltiplas entidades (países, empresas) ao longo do tempo, os modelos SUR podem ser usados para modelar as equações para cada entidade de forma simultânea, capturando correlações nos erros que refletem influências comuns. São também, frequentemente usados para estudos de oferta e demanda.
+
+Se assumirmos que $\textbf{X}_i$ é estritmente exógeno, temos que:
+
+$$
+E[\mbfvarepsilon | \textbf{X}_1, \textbf{X}_2, ..., \textbf{X}_M ] = \textbf{0}
+$$
+
+Se assumirmos homocedasticidade e resíduos não autocorrelacionados em cada equação, temos:
+
+$$
+E[\mbfvarepsilon_{m} \mbfvarepsilon_{m}' | \textbf{X}_1, \textbf{X}_2, ..., \textbf{X}_M ] = \mbfsigma_{mm} \textbf{I}_{T}
+$$
+
+A suposição de exogeneidade estrita utilizada acima é mais forte do que necessário. Pode-se assumir que $E[\mbfvarepsilon_m \mid \textbf{X}_m] = 0$, permitindo correlação entre distúrbios de diferentes equações. Um total de $T$ observações envolve $K_m$ regressores, com $K = \sum_{m=1}^{M} K_m$. Exigimos $T \geq \sum_{m=1}^{M} K_m$ observações para estimar os parâmetros das $M$ equações. Assumimos que os distúrbios não são correlacionados ao longo do tempo, mas podem ser correlacionados entre as equações no mesmo ponto temporal. Logo:
+
+$$
+E[\mbfvarepsilon \mbfvarepsilon' \mid \textbf{X}_1, \textbf{X}_2, ..., \textbf{X}_M ] = \Omega =
+\begin{bmatrix}
+\mbfsigma_{11}\textbf{I} && \mbfsigma_{12}\textbf{I} && \cdots && \mbfsigma_{1M}\textbf{I} \\
+\mbfsigma_{21}\textbf{I} && \mbfsigma_{22}\textbf{I} && \cdots && \mbfsigma_{2M}\textbf{I} \\
+\vdots && \vdots && \ddots && \vdots \\
+\mbfsigma_{M1}\textbf{I} && \mbfsigma_{M2}\textbf{I} && \cdots && \mbfsigma_{MM}\textbf{I}
+\end{bmatrix}
+=
+\Sigma \otimes \textbf{I}
+$$
+
+No caso em que não há autorrelação residual, temos um modelo idêntico ao MCLR que pode ser estimado por MQO:
+
+$$
+\textbf{b} = (\textbf{X}'\textbf{X})^{-1} \textbf{X}'y \implies \textbf{b}_m = (\textbf{X}_m' \textbf{X}_m)^{-1}\textbf{X}_m ' \textbf{y}_m.
+$$
+
+Portanto:
+
+$$
+\textbf{b}_m = \mbfbeta_m + (\textbf{X}_m' \textbf{X}_m)^{-1}\textbf{X}_m ' \mbfvarepsilon_m
+$$
+
+No caso em que temos $\Omega = \Sigma \otimes \textbf{I}$, relaxando o pressuposto de homocedasticidade, podemos estimar o modelo SUR por meio do Método dos Mínimos Quadrados Generalizados (MQG):
+
+$$
+\hat{\beta} = [\textbf{X}'\Omega^{-1}X]^{-1}X'\Omega^{-1}\textbf{y} = [\textbf{X}'(\Sigma^{-1} \otimes I)^{-1}X]^{-1}X'(\Sigma^{-1} \otimes I)^{-1}\textbf{y}
+$$
+
 # APLICAÇÃO
 
 Para aplicar as questões tratadas nas últimas seções, vamos estimar um modelo linear por MQO, utilizando a linguagem R e os dados da REGIC 2018 para municípios de Minas Gerais.
@@ -604,6 +735,11 @@ library(geobr)
 library(ggspatial)
 library(ggrepel)
 library(scatterplot3d)
+library(texreg)
+library(systemfit)
+library(sandwich)
+library(ivreg)
+library(lmtest)
 ```
 
 Carregando a base da REGIC 2018 e ajustando as variáveis de interesse:
@@ -1108,6 +1244,9 @@ df_regic2 <- readxl::read_xlsx(
     "VAR03",
     "VAR07",
     "VAR56",
+    "VAR80",
+    "VAR82",
+    "VAR01"
   ) |>
   dplyr::rename(
     "populacao" = "VAR01",
@@ -1256,7 +1395,7 @@ municipios <- municipios |> dplyr::left_join(
   by = c("code_muni" = "cod")
 )
 
-
+municipios <- na.omit(municipios)
 
 modelo_dummies <- lm(log(pib_pc) ~ log_ia + log(va_adm_publica) + banco_publico + banco_privado, municipios)
 
@@ -1711,6 +1850,268 @@ No modelo de dummies, por sua vez, temos que a presença de bancos públicos exe
 Por sua vez, o modelo com distâncias inversas aos quadrado, o qual visa captar centralidade obteve resultados que, de certa forma, corroboram os resultados encontrados no modelo com dummies. Isto porque só se mostraram significativos os coeficientes da distância inversa ao quadrado dos bancos públicos. Nesse sentido, quanto mais distante está um município de um banco público, maior tende a ser o efeito negativo em seu PIB per capita.
 
 Dessa forma, após a análise dos modelos, conclui-se que os bancos públicos exercem uma importante influência no PIB per capita municipal, de modo que, além disso, fatores aglomerativos também parecem pesar nessa variável, haja vista que há indícios de centralidade de regiões que possuem bancos públicos em relação aos seus vizinhos, que não possuem. Exarceba-se, portanto, a influência das atividades financeiras para a elevação da renda dos munícipes mineiros.
+
+## Teste de Hausman
+
+Podemos fazer o teste de Durbin-Wu-Hausman para verificar endogeneidade no modelo.
+
+
+```{r}
+formula_estrutural <- log(pib_pc) ~ log_ia +
+  log(va_adm_publica) +
+  banco_publico +
+  banco_privado
+
+mqo_estrutural <- lm(formula_estrutural, municipios)
+summary(mqo_estrutural)
+
+# Utilizando índice de comércio como instrumento para índice de atração geral
+
+z <- na.omit(municipios$VAR80)
+x <- na.omit(municipios$log_ia)
+
+cor(z, x)
+
+formula_endogena <- log_ia ~ VAR80 +
+  log(va_adm_publica) +
+  banco_publico +
+  banco_privado
+
+mqo_endogeno <- lm(formula_endogena, municipios)
+summary(mqo_endogeno)
+
+residuos <- mqo_endogeno$residuals
+
+teste <- lm(log(pib_pc) ~ log_ia +
+  log(va_adm_publica) +
+  banco_publico +
+  banco_privado +
+  residuos,
+  municipios
+)
+
+summary(teste)
+```
+
+Como os resíduos foram significativos com $p < 0.05$, rejeitamos a hipótese nula de que a variável Índice de Atração é exógena. Logo, devemos prosseguir com o método de estimação MQ2E.
+
+```{r}
+# Estimação da variável instrumental
+vi <- ivreg::ivreg(
+  log(pib_pc) ~ log_ia +
+  log(va_adm_publica) +
+  banco_publico +
+  banco_privado | VAR80 +
+  log(va_adm_publica) +
+  banco_publico +
+  banco_privado,
+  data=municipios 
+)
+
+summary(vi)
+```
+
+Confirmando o resultado obtido anteriormente, o teste de Wu-Hausman rejeitou a hipótese nula à 5% de significância, indicando que havia endogeneidade no modelo MQO. O teste de Weak, por sua vez, indicou que o instrumento adicionado é fortemente relacionado com a variável endógena.
+
+
+```{r}
+vi2 <- lm(
+  vi$residuals ~ VAR80 +
+  log(va_adm_publica) +
+  banco_publico +
+  banco_privado,
+  data=municipios
+)
+
+summary(vi2)
+```
+Como podemos ver, os resíduos do MQ2E não são explicados pelas variáveis exógenas.
+
+
+*Teste de sobreidentificação*
+
+```{r}
+n <- length(municipios$pib_pc)
+q1 <- summary(vi2)$fstatistic[2] - summary(vi)$waldtest[3]
+
+c(
+  LM = summary(vi)$r.squared * n,
+  pvalue = pchisq(summary(vi)$r.squared * n, df = q1, lower.tail = FALSE)
+)
+```
+
+Como $p > 0.05$, aceitamos a hipótese nula do teste de sobreidentificação e assumimos que todas variáveis instrumentais são exógenas.
+
+É comum que variáveis como PIB per capita, tenham relação endógena com outras variáveis econômicas, pois tanto variáveis como número de empresas numa cidade exercem influência sobre o PIB per capita, como o PIB per capita exerce influência sobre o número de empresas. Essa é uma relação circular, que é melhor estimada quando utilizamos séries temporais com defasagem nas variáveis explicativas, pois como tempo é unidirecional (do passado para o futuro), podemos captar, de fato, relações de causalidade.
+
+A escolha dos instrumentos nesse trabalho foi extremamente difícil, pela natureza do problema e pela limitação da base de dados. Portanto, é de esperar que variáveis como "Valor adicionado da administração pública" também tenha relação endógena com PIB per capita.
+
+A @fig-mqo-mqe compara os parâmetros entre os modelos MQO e MQ2E.
+
+```{r}
+#| fig-cap: "MQO x MQ2E"
+#| label: fig-mqo-mqe
+
+# Extrair coeficientes e erros padrão das equações
+coef_eq1 <- summary(mqo_estrutural)$coefficients
+coef_eq2 <- summary(vi)$coefficients
+
+# Combinar coeficientes em um data frame
+coef_table_eq1 <- data.frame(
+  Equation = "MQO",
+  Term = rownames(coef_eq1),
+  Estimate = coef_eq1[, "Estimate"],
+  StdError = coef_eq1[, "Std. Error"]
+)
+
+coef_table_eq2 <- data.frame(
+  Equation = "MQ2E",
+  Term = rownames(coef_eq2),
+  Estimate = coef_eq2[, "Estimate"],
+  StdError = coef_eq2[, "Std. Error"]
+)
+
+# Combinar os data frames das duas equações
+coef_table <- rbind(coef_table_eq1, coef_table_eq2)
+
+# Adicionar intervalos de confiança
+coef_table$CI_Lower <- coef_table$Estimate - 1.96 * coef_table$StdError
+coef_table$CI_Upper <- coef_table$Estimate + 1.96 * coef_table$StdError
+
+ggplot(coef_table, aes(x = Term, y = Estimate, color = Equation)) +
+  geom_point(position = position_dodge(width = 0.5)) +
+  geom_errorbar(aes(ymin = CI_Lower, ymax = CI_Upper), width = 0.2, position = position_dodge(width = 0.5)) +
+  coord_flip() +
+  labs(
+       x = "Variável",
+       y = "Estimativa",
+       color = "Modelo") +
+  theme_minimal()
+```
+
+## Modelo SUR
+
+Como já descrito nas seções teóricas, o modelo SUR nos ajuda a estimar equações de forma simultânea, de modelos que podem parecer independentes, mas que podem ter correlação entre seus erros.
+
+Na primeira equação, podemos relacionar o PIB per capita com o Índice de Atração Geral e a presenças dos bancos públicos e privados, para ver como os municípios são afetados por essas variáveis e estimar, numa segunda equação, o Índice de Atração Geral, pelo valor adicionado da administração público e pelo índice de comércio. A ideia é tentar separar os efeitos diretos (sobre o PIB) e indiretos (sobre o índice de atratividade) do valor adicionado da administração pública.
+
+```{r}
+eq1 <- log(pib_pc) ~ log_ia +
+  log(va_adm_publica) +
+  banco_publico +
+  banco_privado
+
+eq2 <- log_ia ~ log(va_adm_publica) +
+  VAR80
+
+sistema <- list(eq1, eq2)
+
+# Estimando SUR
+library(systemfit)
+
+sur = systemfit::systemfit(sistema, "SUR", data = municipios)
+summary(sur)
+```
+
+Como se pode observar, os resultados indicam uma correlação residual negativa e fraca, mas existente. Além disso, identificamos que o efeito direto do valor adicionado da administração pública sobre o PIB per capita é muito maior que o efeito indireto pela atratividade do município (@tbl-sur). As @fig-sur-params e @fig-sur-resid mostram a estimativa dos parâmetros e seus intervalos de confiança, e os resíduos, respectivamente.
+
+```{r, results='asis', echo=FALSE}
+#| label: tbl-sur
+#| tbl-cap: "Modelo SUR"
+
+texreg::texreg(sur,
+  file = NULL,
+  caption.above = TRUE,
+  custom.note = "Fonte: Elaboração Própria"
+)
+```
+
+```{r, echo=FALSE}
+#| fig-cap: Parâmetros do modelo SUR
+#| label: fig-sur-params
+
+# Extrair coeficientes e erros padrão das equações
+coef_eq1 <- summary(sur$eq[[1]])$coefficients
+coef_eq2 <- summary(sur$eq[[2]])$coefficients
+
+# Combinar coeficientes em um data frame
+coef_table_eq1 <- data.frame(
+  Equation = "Equação 1",
+  Term = rownames(coef_eq1),
+  Estimate = coef_eq1[, "Estimate"],
+  StdError = coef_eq1[, "Std. Error"]
+)
+
+coef_table_eq2 <- data.frame(
+  Equation = "Equação 2",
+  Term = rownames(coef_eq2),
+  Estimate = coef_eq2[, "Estimate"],
+  StdError = coef_eq2[, "Std. Error"]
+)
+
+# Combinar os data frames das duas equações
+coef_table <- rbind(coef_table_eq1, coef_table_eq2)
+
+# Adicionar intervalos de confiança
+coef_table$CI_Lower <- coef_table$Estimate - 1.96 * coef_table$StdError
+coef_table$CI_Upper <- coef_table$Estimate + 1.96 * coef_table$StdError
+
+ggplot(coef_table, aes(x = Term, y = Estimate, color = Equation)) +
+  geom_point(position = position_dodge(width = 0.5)) +
+  geom_errorbar(aes(ymin = CI_Lower, ymax = CI_Upper), width = 0.2, position = position_dodge(width = 0.5)) +
+  coord_flip() +
+  labs(
+       x = "Termo",
+       y = "Estimativa",
+       color = "Equação") +
+  theme_minimal()
+```
+
+```{r, echo=FALSE}
+#| fig-cap: Resíduos do modelo SUR
+#| label: fig-sur-resid
+
+# Obter resíduos das equações
+residuals_eq1 <- residuals(sur$eq[[1]])
+residuals_eq2 <- residuals(sur$eq[[2]])
+
+# Combinar resíduos em um data frame
+residuals_table <- data.frame(
+  Equation = rep(c("Equação 1", "Equação 2"), each = length(residuals_eq1)),
+  Fitted = c(fitted(sur$eq[[1]]), fitted(sur$eq[[2]])),
+  Residuals = c(residuals_eq1, residuals_eq2)
+)
+
+# Criar gráfico de resíduos
+ggplot(residuals_table, aes(x = Fitted, y = Residuals, color = Equation)) +
+  geom_point(alpha = 0.6) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(
+       x = "Valores Ajustados",
+       y = "Resíduos",
+       color = "Equação") +
+  theme_minimal()
+```
+
+Não podemos comparar os modelos SUR com o de MQO pelo $R^2$ ajustado, pois perdemos graus de liberdade ao utilizar mais variáveis na estimação. No entanto, podemos utilizar a estatística AIC para comparar todos os modelos feitos até aqui, pois o critério AIC visa encontrar o modelo que fornece o melhor ajuste aos dados com a menor complexidade possível:
+
+```{r}
+AIC(mqo_estrutural)
+```
+
+```{r}
+AIC(sur)
+```
+
+```{r}
+library(performance)
+
+performance <- model_performance(vi, metrics = c("AIC"))
+
+performance$AIC
+```
+
+Como o AIC do MQO é menor, podemos dizer que ele tem o melhor ajuste aos dados, ponderando pela sua baixa complexidade.
 
 \newpage
 
